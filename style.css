@@ -34,6 +34,12 @@
   --shadow-hover: 0 20px 44px rgba(88,60,72,.22);
   --transition: .2s ease;
   --page-width: 1180px;
+  --hdr-h: 96px;        /* 상단바 높이 — 메인 레이아웃 계산에 사용 */
+
+  /* 배경 사진 — admin 🌸 사이트 탭에서 교체 (site.js가 덮어씀) */
+  --site-bg: url('assets/baerong-blossom.webp');
+  --site-bg-pos: center 26%;
+  --wash-a: .80;        /* 0~1 — 클수록 사진이 연해짐 */
   --screen-h: 100svh;
 
   --f-hand:  'Gamja Flower', cursive;                 /* 큰 이름 */
@@ -87,164 +93,169 @@ img { max-width: 100%; }
 /* 서브페이지 전용 풀블리드 고정 배경 (§0.0.6 — body 배경 레이어 + fixed) */
 body.sub {
   background-image:
-    linear-gradient(180deg, rgba(255,251,252,.80) 0%, rgba(252,240,244,.74) 26%, rgba(243,232,237,.88) 100%),
-    url('assets/baerong-blossom.webp');
+    linear-gradient(180deg,
+      rgba(255,251,252, var(--wash-a)) 0%,
+      rgba(252,240,244, calc(var(--wash-a) - .06)) 26%,
+      rgba(243,232,237, calc(var(--wash-a) + .08)) 100%),
+    var(--site-bg);
   background-repeat: no-repeat, no-repeat;
-  background-position: center, center 26%;
+  background-position: center, var(--site-bg-pos);
   background-size: 100% 100%, cover;
   background-attachment: fixed, fixed;
 }
 body.sub.dark {
   background-image:
     linear-gradient(180deg, rgba(28,23,27,.93) 0%, rgba(32,26,31,.90) 40%, rgba(24,20,23,.94) 100%),
-    url('assets/baerong-blossom.webp');
+    var(--site-bg);
 }
 
 /* ═══════════════════════════════════════════
-   상단바 — 메인과 서브가 100% 동일한 마크업/CSS
+   상단바 — 마스킹 테이프 (메인·서브 100% 동일 마크업/CSS)
+   시트와 같은 폭·같은 좌우 여백으로 정렬됩니다.
    ═══════════════════════════════════════════ */
 .flower-header {
-  position: relative;
-  z-index: 10;
-  min-height: clamp(76px, 9.2vh, 104px);
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 14px;
-  padding: 0 clamp(20px, 4.4vw, 84px);
-  color: #fff;
-  border-bottom: 1px solid rgba(255,255,255,.26);
-  text-shadow: 0 2px 10px rgba(49,40,48,.3);
+  position: relative; z-index: 10;
+  max-width: var(--page-width); margin: 0 auto;
+  min-height: var(--hdr-h);
+  padding: 24px clamp(14px, 4vw, 44px) 10px;
+  display: grid; grid-template-columns: auto 1fr auto;
+  align-items: center; gap: 20px;
 }
-/* 서브페이지는 배경이 밝은 워시라 글자를 어둡게 */
-body.sub .flower-header {
-  color: var(--text);
-  border-bottom: 1px solid var(--line);
-  text-shadow: none;
-  background: rgba(255,253,249,.62);
-  backdrop-filter: blur(6px);
-}
-body.sub.dark .flower-header { background: rgba(46,40,48,.62); }
 
+/* 로고 = 종이 라벨에 붙인 ✿ + 손글씨 워드마크
+   (메인은 사진 위라 흰 글씨면 대비가 부족 → 메인·서브 모두 종이 라벨로 통일) */
 .flower-logo {
-  display: inline-grid;
-  width: clamp(36px, 2.8vw, 52px);
-  height: clamp(36px, 2.8vw, 52px);
-  place-items: center;
-  color: #f4c8d5;
-  border: 1px solid rgba(255,255,255,.3);
-  border-radius: 50%;
-  background: rgba(130,83,104,.16);
-  font: 400 clamp(23px, 1.75vw, 33px)/1 Georgia, serif;
-  transition: var(--transition);
-  flex: none;
+  position: relative; flex: none;
+  display: flex; align-items: baseline; gap: 11px;
+  padding: 8px 18px 10px;
+  background: rgba(255,253,249,.88);
+  box-shadow: 0 3px 12px rgba(88,60,72,.13);
+  transform: rotate(-1.4deg);
+  transition: transform var(--transition), background var(--transition);
 }
-.flower-logo:hover { color:#fff; background: rgba(215,156,178,.32); transform: rotate(8deg); }
-body.sub .flower-logo {
-  color: var(--main-deep);
-  border-color: var(--main-light);
-  background: var(--main-light);
+.flower-logo::before,
+.flower-logo::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 6px;
+  background: radial-gradient(circle at 0 50%, transparent 2.9px, rgba(255,253,249,.88) 3px) 0 0/6px 8px repeat-y;
 }
-body.sub .flower-logo:hover { color:#fff; background: var(--main-dark); }
+.flower-logo::before { left: -5px; transform: scaleX(-1); }
+.flower-logo::after  { right: -5px; }
+.flower-logo:hover { background: rgba(255,253,249,.98); transform: rotate(-1.4deg) translateY(-1px); }
+.flower-logo .fl {
+  font: 400 38px/1 Georgia, serif; color: var(--main-dark);
+  transition: transform var(--transition);
+}
+.flower-logo .wm {
+  font: 400 50px/.78 var(--f-hand); color: var(--logo);
+  letter-spacing: -.02em;
+}
+.flower-logo:hover .fl { transform: rotate(14deg); }
 
+/* nav = 테이프 조각들 */
 .flower-nav {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(10px, 1.6vw, 30px);
-  min-width: 0;
-  overflow-x: auto;
-  scrollbar-width: none;
+  display: flex; align-items: center; justify-content: center;
+  gap: 9px; min-width: 0;
+  overflow-x: auto; scrollbar-width: none;
 }
 .flower-nav::-webkit-scrollbar { display: none; }
 .flower-nav a {
-  padding: 9px 0;
-  color: rgba(255,255,255,.83);
-  font-size: clamp(13px, .9vw, 17px);
-  font-weight: 700;
-  letter-spacing: -.02em;
-  white-space: nowrap;
+  position: relative; flex: none;
+  padding: 12px 20px;
+  font-size: 17px; font-weight: 700; letter-spacing: -.02em;
+  color: var(--text); white-space: nowrap;
+  background: rgba(255,253,249,.66);
+  box-shadow: 0 2px 9px rgba(88,60,72,.09);
+  transition: background var(--transition), transform var(--transition), color var(--transition);
 }
-/* 현재 페이지 표시 — 마크업은 전 페이지 동일, body[data-page]로만 구분 */
+/* 테이프 톱니 끝 */
+.flower-nav a::before,
+.flower-nav a::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 6px;
+  background: radial-gradient(circle at 0 50%, transparent 2.9px, rgba(255,253,249,.66) 3px) 0 0/6px 8px repeat-y;
+}
+.flower-nav a::before { left: -5px; transform: scaleX(-1); }
+.flower-nav a::after  { right: -5px; }
+/* 붙인 각도 살짝 다르게 */
+.flower-nav a:nth-child(odd)  { transform: rotate(-1.2deg); }
+.flower-nav a:nth-child(even) { transform: rotate(1deg); }
+.flower-nav a:hover { background: rgba(255,253,249,.9); }
+.flower-nav a:hover::before,
+.flower-nav a:hover::after {
+  background: radial-gradient(circle at 0 50%, transparent 2.9px, rgba(255,253,249,.9) 3px) 0 0/6px 8px repeat-y;
+}
+/* 메인(사진 위)은 테이프를 조금 더 불투명하게 */
+body:not(.sub) .flower-nav a { background: rgba(255,253,249,.8); }
+body:not(.sub) .flower-nav a::before,
+body:not(.sub) .flower-nav a::after {
+  background: radial-gradient(circle at 0 50%, transparent 2.9px, rgba(255,253,249,.8) 3px) 0 0/6px 8px repeat-y;
+}
+
+/* 현재 페이지 = 진한 테이프 (마크업은 전 페이지 동일, body[data-page]로만 구분) */
 body[data-page="home"]     .flower-nav a[data-nav="home"],
 body[data-page="profile"]  .flower-nav a[data-nav="profile"],
 body[data-page="schedule"] .flower-nav a[data-nav="schedule"],
 body[data-page="notice"]   .flower-nav a[data-nav="notice"],
 body[data-page="work"]     .flower-nav a[data-nav="work"],
-body[data-page="dress"]    .flower-nav a[data-nav="dress"] { color:#fff; }
+body[data-page="dress"]    .flower-nav a[data-nav="dress"] {
+  background: var(--tape); color: var(--main-deep);
+  transform: rotate(.6deg) scale(1.05);
+}
+body[data-page="home"]     .flower-nav a[data-nav="home"]::before,
 body[data-page="home"]     .flower-nav a[data-nav="home"]::after,
+body[data-page="profile"]  .flower-nav a[data-nav="profile"]::before,
 body[data-page="profile"]  .flower-nav a[data-nav="profile"]::after,
+body[data-page="schedule"] .flower-nav a[data-nav="schedule"]::before,
 body[data-page="schedule"] .flower-nav a[data-nav="schedule"]::after,
+body[data-page="notice"]   .flower-nav a[data-nav="notice"]::before,
 body[data-page="notice"]   .flower-nav a[data-nav="notice"]::after,
+body[data-page="work"]     .flower-nav a[data-nav="work"]::before,
 body[data-page="work"]     .flower-nav a[data-nav="work"]::after,
+body[data-page="dress"]    .flower-nav a[data-nav="dress"]::before,
 body[data-page="dress"]    .flower-nav a[data-nav="dress"]::after {
-  content:""; display:block; width:6px; height:6px;
-  margin:6px auto 0; border-radius:50%; background:#efc8d4;
+  background: radial-gradient(circle at 0 50%, transparent 2.9px, var(--tape) 3px) 0 0/6px 8px repeat-y;
 }
-body.sub .flower-nav a { color: var(--text-mid); }
-body.sub .flower-nav a:hover { color: var(--main-deep); }
-body.sub[data-page="profile"]  .flower-nav a[data-nav="profile"],
-body.sub[data-page="schedule"] .flower-nav a[data-nav="schedule"],
-body.sub[data-page="notice"]   .flower-nav a[data-nav="notice"],
-body.sub[data-page="work"]     .flower-nav a[data-nav="work"],
-body.sub[data-page="dress"]    .flower-nav a[data-nav="dress"] { color: var(--main-deep); }
-body.sub[data-page="profile"]  .flower-nav a[data-nav="profile"]::after,
-body.sub[data-page="schedule"] .flower-nav a[data-nav="schedule"]::after,
-body.sub[data-page="notice"]   .flower-nav a[data-nav="notice"]::after,
-body.sub[data-page="work"]     .flower-nav a[data-nav="work"]::after,
-body.sub[data-page="dress"]    .flower-nav a[data-nav="dress"]::after { background: var(--main-dark); }
 
-.flower-tools { display:flex; align-items:center; gap:10px; justify-self:end; }
-.flower-header-note {
-  margin: 0;
-  font: 400 clamp(17px, 1.35vw, 26px)/1 var(--f-note);
-  letter-spacing: .02em;
-  transform: rotate(-1deg);
-  white-space: nowrap;
-}
-.flower-header-note span { margin-left:4px; color:#f4c9d5; }
-body.sub .flower-header-note { color: var(--main-dark); }
-body.sub .flower-header-note span { color: var(--main-dark); }
+.flower-tools { display: flex; align-items: center; gap: 11px; justify-self: end; }
 
 /* 다크 토글 (세로형 스위치) */
 .dk-toggle {
-  width: 22px; height: 33px; border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.45);
-  background: rgba(255,255,255,.16);
-  position: relative; cursor: pointer; flex:none; padding:0;
+  width: 26px; height: 39px; border-radius: 999px;
+  border: 1px solid var(--pline); background: var(--main-light);
+  position: relative; cursor: pointer; flex: none; padding: 0;
 }
 .dk-toggle i {
-  position:absolute; left:50%; top:3px; transform:translateX(-50%);
-  width:14px; height:14px; border-radius:50%;
-  background:#fff; transition: top .22s ease;
-  display:grid; place-items:center; font-size:9px; font-style:normal;
+  position: absolute; left: 50%; top: 4px; transform: translateX(-50%);
+  width: 17px; height: 17px; border-radius: 50%;
+  background: var(--card); box-shadow: 0 1px 3px rgba(0,0,0,.18);
+  transition: top .22s ease;
+  display: grid; place-items: center; font-size: 11px; font-style: normal;
 }
-body.dark .dk-toggle i { top:14px; }
-body.sub .dk-toggle { border-color: var(--main-light); background: var(--main-light); }
-body.sub .dk-toggle i { background: var(--card); box-shadow:0 1px 3px rgba(0,0,0,.2); }
+body.dark .dk-toggle i { top: 17px; }
+body:not(.sub) .dk-toggle { border-color: rgba(255,255,255,.5); background: rgba(255,255,255,.24); }
 
-/* 문의 버튼 */
+/* 문의 = 테이프 버튼 */
 .ask {
-  border:1px solid rgba(255,255,255,.42);
-  background: rgba(255,255,255,.14);
-  color:#fff; font-family:inherit; font-weight:700; font-size:12.5px;
-  padding:8px 15px; border-radius:999px; cursor:pointer; flex:none;
-  white-space:nowrap; transition: var(--transition);
+  border: 0; background: var(--tape); color: var(--main-deep);
+  font-family: inherit; font-weight: 700; font-size: 14.5px;
+  padding: 11px 19px; cursor: pointer; flex: none;
+  white-space: nowrap; transform: rotate(-1deg);
+  transition: filter var(--transition), transform var(--transition);
 }
-.ask:hover { background: rgba(255,255,255,.3); }
-body.sub .ask {
-  border-color: var(--main-dark); background: var(--main-dark); color:#fff;
-}
-body.sub .ask:hover { filter: brightness(1.08); }
+.ask:hover { filter: brightness(1.05); transform: rotate(-1deg) translateY(-1px); }
+body:not(.sub) .ask { background: rgba(255,253,249,.82); }
 
 @media (max-width: 900px) {
   .flower-header {
     grid-template-columns: auto 1fr;
-    gap: 8px; padding: 14px 16px;
+    gap: 10px; padding: 16px 16px 8px; min-height: 0;
   }
-  .flower-nav { grid-column:1/-1; grid-row:2; justify-content:flex-start; }
-  .flower-tools { grid-column:2; grid-row:1; }
-  .flower-header-note { display:none; }
+  .flower-logo { padding: 6px 13px 8px; }
+  .flower-logo .fl { font-size: 30px; }
+  .flower-logo .wm { font-size: 38px; }
+  .flower-nav { grid-column: 1/-1; grid-row: 2; justify-content: flex-start; padding: 4px 0 2px; }
+  .flower-nav a { font-size: 15px; padding: 10px 15px; }
+  .flower-tools { grid-column: 2; grid-row: 1; }
+  .ask { font-size: 13px; padding: 9px 14px; }
 }
 
 /* ═══════════════════════════════════════════

@@ -61,11 +61,11 @@
     .al:hover .zoom, .ps:hover .zoom { opacity:1; }
   </style>
 </head>
-<body class="sub" data-page="dress">
+<body class="sub" data-page="dress" data-title="옷장">
 <script>if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');</script>
 
 <header class="flower-header">
-    <a class="flower-logo" href="../" aria-label="배롱 FLOWER DIARY 메인">✿</a>
+    <a class="flower-logo" href="../" aria-label="배롱 FLOWER DIARY 메인"><span class="fl">✿</span><span class="wm" data-site="logo-text">배롱</span></a>
     <nav class="flower-nav" aria-label="메인 메뉴">
       <a data-nav="home" href="../">메인</a>
       <a data-nav="profile" href="../profile/">프로필</a>
@@ -75,7 +75,6 @@
       <a data-nav="dress" href="../dress/">옷장</a>
     </nav>
     <div class="flower-tools">
-      <p class="flower-header-note">a page for baerong <span>♡</span></p>
       <button class="dk-toggle" id="dkToggle" type="button" aria-label="다크 모드 전환"><i id="dkKnob">☾</i></button>
       <button class="ask" type="button" onclick="openAsk()">✉ 문의</button>
     </div>
@@ -87,19 +86,19 @@
     <span class="tape r"></span>
     <span class="doodle d1">✿</span>
     <div class="sheet-head">
-      <p class="sheet-index">OUTFIT ALBUM · VOL. 05</p>
+      <p class="sheet-index" data-site="hd-dress-idx">OUTFIT ALBUM · VOL. 05</p>
       <div class="sheet-title-row">
-        <h1 class="sheet-title">옷장</h1>
-        <span class="sheet-en">baerong's closet</span>
+        <h1 class="sheet-title" data-site="hd-dress-title">옷장</h1>
+        <span class="sheet-en" data-site="hd-dress-en">baerong's closet</span>
       </div>
-      <p class="sheet-desc">새로 갈아입은 옷은 <b>포스터</b>로, 이미 입던 옷은 <b>기존 옷</b>에서 볼 수 있어요. 사진을 누르면 크게 볼 수 있어요.</p>
+      <p class="sheet-desc" data-site="hd-dress-desc">새로 갈아입은 옷은 포스터로, 이미 입던 옷은 기존 옷에서 볼 수 있어요. 사진을 누르면 크게 볼 수 있어요.</p>
       <div class="sheet-rule"></div>
     </div>
 
     <div class="dr-bar">
       <div class="seg" id="seg">
-        <button class="pill on" type="button" data-mode="new">✨ 새 옷</button>
-        <button class="pill" type="button" data-mode="old">🗂 기존 옷</button>
+        <button class="pill on" type="button" data-mode="new" data-site="lbl-new">✨ 새 옷</button>
+        <button class="pill" type="button" data-mode="old" data-site="lbl-old">🗂 기존 옷</button>
       </div>
     </div>
     <div class="cats" id="cats"></div>
@@ -116,16 +115,16 @@
   </div>
 </div>
 
-<div class="ghost-mark" aria-hidden="true">baerong ♡</div>
+<div class="ghost-mark" aria-hidden="true" data-site="ghost-text">baerong ♡</div>
 <footer>
-  <span class="fnote">be sweet, stay a while ♡</span>
-  © 2026 배롱 (BAERONG) Official.<br>
-  비즈니스 문의 — baerong2486@gmail.com
+  <span class="fnote" data-site="footer-note">be sweet, stay a while ♡</span>
+  <span data-site="footer-copy">© 2026 배롱 (BAERONG) Official.</span><br>
+  <span id="footEmail">비즈니스 문의 — baerong2486@gmail.com</span>
 </footer>
 <div class="askmask" id="askmask">
   <div class="askmodal">
-    <h3>쪽지 남기기</h3>
-    <p>배롱에게 하고 싶은 말을 남겨주세요. 익명으로 전달돼요 🍀</p>
+    <h3 data-site="ask-title">쪽지 남기기</h3>
+    <p data-site="ask-desc">배롱에게 하고 싶은 말을 남겨주세요. 익명으로 전달돼요 🍀</p>
     <textarea id="askmsg" placeholder="여기에 적어주세요..."></textarea>
     <div class="askbtns">
       <button class="no" type="button" onclick="closeAsk()">취소</button>
@@ -256,6 +255,8 @@ function closeLb(){ document.getElementById('lb').classList.remove('open'); }
 document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeLb(); });
 
 async function load(){
+  await loadProfile();
+  applySite();
   try {
     items = (await fetchAll('dress_items', { order:'sort_order', asc:true })) || [];
     items.sort(function(a,b){ return ((a.sort_order||0)-(b.sort_order||0)) || (new Date(a.created_at) - new Date(b.created_at)); });

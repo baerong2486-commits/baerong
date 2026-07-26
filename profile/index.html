@@ -119,11 +119,11 @@
     .lnk:hover small { color:rgba(255,255,255,.8); }
   </style>
 </head>
-<body class="sub" data-page="profile">
+<body class="sub" data-page="profile" data-title="프로필">
 <script>if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');</script>
 
 <header class="flower-header">
-    <a class="flower-logo" href="../" aria-label="배롱 FLOWER DIARY 메인">✿</a>
+    <a class="flower-logo" href="../" aria-label="배롱 FLOWER DIARY 메인"><span class="fl">✿</span><span class="wm" data-site="logo-text">배롱</span></a>
     <nav class="flower-nav" aria-label="메인 메뉴">
       <a data-nav="home" href="../">메인</a>
       <a data-nav="profile" href="../profile/">프로필</a>
@@ -133,7 +133,6 @@
       <a data-nav="dress" href="../dress/">옷장</a>
     </nav>
     <div class="flower-tools">
-      <p class="flower-header-note">a page for baerong <span>♡</span></p>
       <button class="dk-toggle" id="dkToggle" type="button" aria-label="다크 모드 전환"><i id="dkKnob">☾</i></button>
       <button class="ask" type="button" onclick="openAsk()">✉ 문의</button>
     </div>
@@ -146,7 +145,7 @@
     <span class="tape r"></span>
     <span class="doodle d1">♡</span>
     <span class="doodle d2">✿</span>
-    <p class="sheet-index">PROFILE NOTE · VOL. 01</p>
+    <p class="sheet-index" data-site="hd-profile-idx">PROFILE NOTE · VOL. 01</p>
     <div class="p-hero">
       <div class="p-av-wrap" id="avatarWrap">
         <span class="p-av-tape"></span>
@@ -168,7 +167,7 @@
   <!-- ② 프로필 정보 (표 아님 · 한 줄씩 기재) -->
   <section class="dsheet">
     <span class="tape l"></span>
-    <h2 class="sec-title">프로필 <span class="en">PROFILE</span></h2>
+    <h2 class="sec-title"><span data-site="sec-profile">프로필</span> <span class="en">PROFILE</span></h2>
     <div id="p-lines">
       <div class="dline"><span class="k">생일</span><span class="lead"></span><span class="v" data-hook="info-birth">08.18</span><span class="dd" id="dd-birth">D-</span></div>
       <div class="dline"><span class="k">데뷔일</span><span class="lead"></span><span class="v" data-hook="info-debut">2024.09.23</span><span class="dd" id="dd-debut">D-</span></div>
@@ -177,6 +176,7 @@
       <div class="dline"><span class="k">팬닉</span><span class="lead"></span><span class="v" data-hook="info-fandom">ε:</span></div>
       <div class="dline"><span class="k">소속</span><span class="lead"></span><span class="v" data-hook="info-agency">개인세</span></div>
       <div class="dline"><span class="k">주력 게임</span><span class="lead"></span><span class="v" data-hook="info-game">배틀그라운드 · 마인크래프트 · 롤토체스</span></div>
+      <div id="p-extra"></div>
     </div>
     <div class="sheet-rule" style="margin:14px 0 12px"></div>
     <div class="chips" id="p-tags">
@@ -186,7 +186,7 @@
 
   <!-- ③ 능력치 -->
   <section class="dsheet">
-    <h2 class="sec-title">능력치 <span class="en">STATUS</span></h2>
+    <h2 class="sec-title"><span data-site="sec-stats">능력치</span> <span class="en">STATUS</span></h2>
     <div id="p-stats">
       <div class="empty"><div class="empty-icon">✿</div>능력치를 불러오는 중…</div>
     </div>
@@ -195,29 +195,27 @@
   <!-- ④ 좋아함/싫어함 · TMI -->
   <div class="grid2">
     <section class="dsheet">
-      <h2 class="sec-title">좋아 · 싫어 <span class="en">LIKES</span></h2>
+      <h2 class="sec-title"><span data-site="sec-likes">좋아 · 싫어</span> <span class="en">LIKES</span></h2>
       <div class="lk-block">
-        <p class="lk-title">🍀 좋아하는 것</p>
+        <p class="lk-title" data-site="lbl-like">🍀 좋아하는 것</p>
         <div class="chips" id="p-likes"></div>
       </div>
       <div class="lk-block">
-        <p class="lk-title">🥀 싫어하는 것</p>
+        <p class="lk-title" data-site="lbl-dislike">🥀 싫어하는 것</p>
         <div class="chips" id="p-dislikes"></div>
       </div>
     </section>
 
     <section class="dsheet">
-      <h2 class="sec-title">TMI <span class="en">SMALL TALK</span></h2>
-      <div class="dline"><span class="k">좋아하는 음식</span><span class="lead"></span><span class="v" data-hook="tmi-food">-</span></div>
-      <div class="dline"><span class="k">요즘 듣는 노래</span><span class="lead"></span><span class="v" data-hook="tmi-song">-</span></div>
-      <div class="dline"><span class="k">최근 본 것</span><span class="lead"></span><span class="v" data-hook="tmi-book">-</span></div>
-      <div class="dline"><span class="k">방송 시간</span><span class="lead"></span><span class="v" data-hook="sched-note">매일 8~9시 사이 (랜덤 휴방)</span></div>
+      <h2 class="sec-title"><span data-site="sec-tmi">TMI</span> <span class="en">SMALL TALK</span></h2>
+      <div id="p-tmi"></div>
+      <div class="dline"><span class="k">방송 시간</span><span class="lead"></span><span class="v" data-site="sched-note">매일 8~9시 사이 (랜덤 휴방)</span></div>
     </section>
   </div>
 
   <!-- ⑤ 방송 요일 -->
   <section class="dsheet">
-    <h2 class="sec-title">방송 요일 <span class="en">WEEKLY</span></h2>
+    <h2 class="sec-title"><span data-site="sec-week">방송 요일</span> <span class="en">WEEKLY</span></h2>
     <div class="week" id="p-week">
       <div class="wd" id="day-0"><small>월</small><b>—</b></div>
       <div class="wd" id="day-1"><small>화</small><b>—</b></div>
@@ -233,12 +231,12 @@
   <!-- ⑥ 목표 · 하고픈 말 -->
   <div class="grid2">
     <section class="dsheet">
-      <h2 class="sec-title">목표 <span class="en">TO DO</span></h2>
+      <h2 class="sec-title"><span data-site="sec-goal">목표</span> <span class="en">TO DO</span></h2>
       <div id="p-milestones"></div>
     </section>
     <section class="dsheet">
       <span class="doodle d2">♡</span>
-      <h2 class="sec-title">하고픈 말 <span class="en">ABOUT</span></h2>
+      <h2 class="sec-title"><span data-site="sec-about">하고픈 말</span> <span class="en">ABOUT</span></h2>
       <p class="about" data-hook="msg">안녕하세요, 배롱이에요!
 잔잔하게 게임하고 수다 떠는 방송을 하고 있어요.
 편하게 들러서 하루 이야기 들려주세요 🍀</p>
@@ -247,29 +245,29 @@
 
   <!-- ⑦ 다시보기 -->
   <section class="dsheet" id="songs-card">
-    <h2 class="sec-title">다시보기 <span class="en">VOD</span></h2>
+    <h2 class="sec-title"><span data-site="sec-vod">다시보기</span> <span class="en">VOD</span></h2>
     <div class="vod-grid" id="ovod-grid"></div>
   </section>
 
   <!-- ⑧ 링크 -->
   <section class="dsheet">
     <span class="tape r"></span>
-    <h2 class="sec-title">관련 링크 <span class="en">LINKS</span></h2>
+    <h2 class="sec-title"><span data-site="sec-links">관련 링크</span> <span class="en">LINKS</span></h2>
     <div class="links" id="p-links"></div>
   </section>
 
 </main>
 
-<div class="ghost-mark" aria-hidden="true">baerong ♡</div>
+<div class="ghost-mark" aria-hidden="true" data-site="ghost-text">baerong ♡</div>
 <footer>
-  <span class="fnote">be sweet, stay a while ♡</span>
-  © 2026 배롱 (BAERONG) Official.<br>
-  비즈니스 문의 — baerong2486@gmail.com
+  <span class="fnote" data-site="footer-note">be sweet, stay a while ♡</span>
+  <span data-site="footer-copy">© 2026 배롱 (BAERONG) Official.</span><br>
+  <span id="footEmail">비즈니스 문의 — baerong2486@gmail.com</span>
 </footer>
 <div class="askmask" id="askmask">
   <div class="askmodal">
-    <h3>쪽지 남기기</h3>
-    <p>배롱에게 하고 싶은 말을 남겨주세요. 익명으로 전달돼요 🍀</p>
+    <h3 data-site="ask-title">쪽지 남기기</h3>
+    <p data-site="ask-desc">배롱에게 하고 싶은 말을 남겨주세요. 익명으로 전달돼요 🍀</p>
     <textarea id="askmsg" placeholder="여기에 적어주세요..."></textarea>
     <div class="askbtns">
       <button class="no" type="button" onclick="closeAsk()">취소</button>
@@ -282,85 +280,61 @@
 <script src="../supabase.js"></script>
 <script src="../site.js"></script>
 <script>
-/* ─────────── 기본값 (DB가 비어 있어도 이 값이 보임) ─────────── */
-var DEF = {
-  'soop-id': 'baerong2',
-  'info-name': '배롱', 'info-en': 'BAERONG',
-  'bio': '당신과 행복한 하루를 만들고 싶은 배롱입니다 🍀',
-  'quote': '오늘도 와줘서 고마워요, 우리 같이 좋은 하루 만들어요!',
-  'info-birth': '08.18', 'info-debut': '2024.09.23',
-  'info-content': '게임 & 소통 & 풀트', 'info-mbti': 'IST(F)J',
-  'info-fandom': 'ε:', 'info-agency': '개인세',
-  'info-game': '배틀그라운드 · 마인크래프트 · 롤토체스',
-  'info-tags': '달달보이스, 잔잔함, 바보스러움, 멘헤라',
-  'stats': '잔잔함:90\n멘헤라:80\n바보미:70\n게임력:40',
-  'like-list': '게임, 소통, 배롱나무, 토끼, 마인크래프트',
-  'dislike-list': '',
-  'tmi-food': '-', 'tmi-song': '-', 'tmi-book': '-',
-  'sched-note': '매일 8~9시 사이 (랜덤 휴방)',
-  'milestones': '달성|첫 방송\n진행 중|매일 잔잔하게 방송하기',
-  'msg': '안녕하세요, 배롱이에요!\n잔잔하게 게임하고 수다 떠는 방송을 하고 있어요.\n편하게 들러서 하루 이야기 들려주세요 🍀',
-  'days': '0,1,2,3,4,5,6',
-  'link-soop': 'https://www.sooplive.com/station/baerong2',
-  'link-discord': 'https://discord.gg/tEsU79stA',
-  'link-fancim': 'https://fancim.me/celeb/profile.aspx?url=504450',
-  'link-youtube': '', 'link-x': ''
-};
+/* 기본값·유틸·사이트 전역 적용은 site.js 담당 (DEF / pv / applySite) */
 
-var P = {};
-function val(k){ var v = asText(P[k]).trim(); return v || (DEF[k] || ''); }
+function dlineHTML(k, v){
+  return '<div class="dline"><span class="k">' + esc(k) + '</span><span class="lead"></span>' +
+         '<span class="v">' + esc(v) + '</span></div>';
+}
 
-/* ─────────── 렌더 ─────────── */
 function renderHooks(){
   document.querySelectorAll('[data-hook]').forEach(function(el){
-    var v = val(el.getAttribute('data-hook'));
+    var v = pv(el.getAttribute('data-hook'));
     if (v !== '') el.textContent = v;
   });
 }
-
 function renderAvatar(){
-  var direct = asText(P['avatar']).trim();
-  var url = direct || soopAvatar(val('soop-id'));
   var img = document.getElementById('p-avatar');
-  if (url && img) img.src = url;
+  var url = avatarUrl();
+  if (img && url) img.src = url;
 }
-
 function renderDday(){
-  var b = ddayFromMMDD(val('info-birth'));
+  var b = ddayFromMMDD(pv('info-birth'));
   var eb = document.getElementById('dd-birth');
   if (eb) { if (b === null) { eb.style.display='none'; } else { eb.style.display=''; eb.textContent = ddLabel(b); } }
-
-  var a = anniversary(val('info-debut'));
+  var a = anniversary(pv('info-debut'));
   var ed = document.getElementById('dd-debut');
   if (ed) {
     if (!a) { ed.style.display='none'; }
     else { ed.style.display=''; ed.textContent = (a.days === 0 ? (a.years + '주년 🎉') : ('D-' + a.days + ' · ' + a.years + '주년')); }
   }
 }
-
+/* 프로필 추가 줄 (admin: 라벨:값) */
+function renderExtra(){
+  var box = document.getElementById('p-extra');
+  if (!box) return;
+  box.innerHTML = asPairs(pv('info-extra')).map(function(r){ return dlineHTML(r.k, r.v); }).join('');
+}
+/* TMI = 자유 목록 (admin: 라벨:값) */
+function renderTmi(){
+  var box = document.getElementById('p-tmi');
+  if (!box) return;
+  box.innerHTML = asPairs(pv('tmi')).map(function(r){ return dlineHTML(r.k, r.v); }).join('');
+}
 function renderTags(){
-  var arr = asList(val('info-tags'));
+  var arr = asList(pv('info-tags'));
   var box = document.getElementById('p-tags');
   if (!box) return;
-  box.innerHTML = arr.length
-    ? arr.map(function(t){ return '<span class="tag">' + esc(t.replace(/^#/,'')) + '</span>'; }).join('')
-    : '';
+  box.innerHTML = arr.map(function(t){ return '<span class="tag">' + esc(t.replace(/^#/,'')) + '</span>'; }).join('');
   box.style.display = arr.length ? 'flex' : 'none';
 }
-
 function renderStats(){
   var box = document.getElementById('p-stats');
   if (!box) return;
-  var raw = asText(P['stats']).trim();
-  var lines = asLines(raw || DEF['stats']);
-  var rows = [];
-  lines.forEach(function(l){
-    var m = String(l).split(':');
-    if (m.length < 2) return;
-    var n = parseInt(String(m[1]).replace(/[^0-9]/g,''), 10);
-    if (isNaN(n)) return;
-    rows.push({ n: m[0].trim(), v: Math.max(0, Math.min(100, n)) });
-  });
+  var rows = asPairs(pv('stats')).map(function(r){
+    var n = parseInt(String(r.v).replace(/[^0-9]/g,''), 10);
+    return isNaN(n) ? null : { n: r.k, v: Math.max(0, Math.min(100, n)) };
+  }).filter(Boolean);
   if (!rows.length){ box.innerHTML = '<div class="empty"><div class="empty-icon">✿</div>아직 적어둔 능력치가 없어요</div>'; return; }
   box.innerHTML = rows.map(function(r){
     return '<div class="stat"><div class="stat-top"><span class="stat-n">' + esc(r.n) + '</span>' +
@@ -371,24 +345,20 @@ function renderStats(){
     box.querySelectorAll('.stat-fill').forEach(function(f){ f.style.width = f.dataset.w + '%'; });
   }, 60);
 }
-
 function renderLikes(){
-  var like = asList(val('like-list'));
-  var dis  = asList(P['dislike-list'] != null ? P['dislike-list'] : '');
-  var lb = document.getElementById('p-likes');
-  var db_ = document.getElementById('p-dislikes');
-  lb.innerHTML = like.length
+  var like = asList(pv('like-list'));
+  var dis  = asList(asText(P['dislike-list']));
+  document.getElementById('p-likes').innerHTML = like.length
     ? like.map(function(t){ return '<span class="tag">' + esc(t) + '</span>'; }).join('')
     : '<span style="font-size:12.5px;color:var(--text-soft)">아직 비어 있어요</span>';
-  db_.innerHTML = dis.length
+  document.getElementById('p-dislikes').innerHTML = dis.length
     ? dis.map(function(t){ return '<span class="tag chip-no">' + esc(t) + '</span>'; }).join('')
     : '<span style="font-size:12.5px;color:var(--text-soft)">딱히 없어요 🍀</span>';
 }
-
 function renderWeek(){
-  var days = asText(val('days')).split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+  var days = pv('days').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
   for (var i = 0; i < 7; i++) {
-    var el = document.getElementById('day-' + i);   // 0=월 … 6=일 (admin 체크값과 동일)
+    var el = document.getElementById('day-' + i);   /* 0=월 … 6=일 (admin 체크값과 동일) */
     if (!el) continue;
     var on = days.indexOf(String(i)) !== -1;
     el.classList.toggle('on', on);
@@ -396,10 +366,9 @@ function renderWeek(){
     if (b) b.textContent = on ? '방송' : '휴방';
   }
 }
-
 function renderMilestones(){
   var box = document.getElementById('p-milestones');
-  var lines = asLines(val('milestones'));
+  var lines = asLines(pv('milestones'));
   if (!lines.length){ box.innerHTML = '<div class="empty"><div class="empty-icon">✿</div>적어둔 목표가 없어요</div>'; return; }
   box.innerHTML = lines.map(function(l){
     var p = String(l).split('|');
@@ -409,27 +378,24 @@ function renderMilestones(){
     return '<div class="ms' + (done ? ' done' : '') + '"><span class="st">' + esc(st) + '</span><span class="tx">' + esc(tx) + '</span></div>';
   }).join('');
 }
-
 function renderLinks(){
   var defs = [
-    ['SOOP',     'link-soop',    '방송국 바로가기'],
-    ['DISCORD',  'link-discord', '디스코드 서버'],
-    ['FANCIM',   'link-fancim',  '팬심 프로필'],
-    ['YOUTUBE',  'link-youtube', '유튜브 채널'],
-    ['X',        'link-x',       'X (트위터)']
+    ['SOOP',    'link-soop',    '방송국 바로가기'],
+    ['DISCORD', 'link-discord', '디스코드 서버'],
+    ['FANCIM',  'link-fancim',  '팬심 프로필'],
+    ['YOUTUBE', 'link-youtube', '유튜브 채널'],
+    ['X',       'link-x',       'X (트위터)']
   ];
   var html = defs.map(function(d){
-    var u = val(d[1]);
+    var u = pv(d[1]);
     if (!u) return '';
     return '<a class="lnk" href="' + esc(u) + '" target="_blank" rel="noreferrer"><span>' + d[0] +
            '<small>' + esc(d[2]) + '</small></span><span>↗</span></a>';
   }).filter(Boolean).join('');
   document.getElementById('p-links').innerHTML = html || '<div class="empty">등록된 링크가 없어요</div>';
 }
-
 async function renderVod(){
   var grid = document.getElementById('ovod-grid');
-  var card = document.getElementById('songs-card');
   var rows = [];
   try { rows = await fetchAll('original_songs', { order: 'id', asc: false }); } catch (e) { rows = []; }
   if (!rows || !rows.length){
@@ -444,20 +410,14 @@ async function renderVod(){
   }).join('');
 }
 
-/* ─────────── 로드 ─────────── */
 async function load(){
+  await loadProfile();
   try {
-    const { data } = await db.from('profile').select('data').eq('id', 1).single();
-    P = (data && data.data) || {};
-  } catch (e) { P = {}; }
-
-  try {
-    renderHooks(); renderAvatar(); renderDday(); renderTags();
+    applySite();
+    renderHooks(); renderAvatar(); renderDday(); renderExtra(); renderTmi(); renderTags();
     renderStats(); renderLikes(); renderWeek(); renderMilestones(); renderLinks();
   } catch (e) { console.error(e); }
-
   try { await renderVod(); } catch (e) {}
-
   markReady();
   try { if (typeof initIframeResize === 'function') initIframeResize(); } catch (e) {}
 }

@@ -33,7 +33,7 @@
 
     .flower-layout {
       position:relative; z-index:2;
-      height:calc(var(--screen-h) - clamp(76px, 9.2vh, 104px));
+      height:calc(var(--screen-h) - var(--hdr-h));
       opacity:0; transition:opacity .34s ease;
     }
     body.ready .flower-layout { opacity:1; }
@@ -151,7 +151,7 @@
     }
   </style>
 </head>
-<body data-page="home">
+<body data-page="home" data-title="Flower Diary">
 <script>if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');</script>
 
 <main class="concept-two">
@@ -159,7 +159,7 @@
   <div class="flower-wash" aria-hidden="true"></div>
 
   <header class="flower-header">
-    <a class="flower-logo" href="./" aria-label="배롱 FLOWER DIARY 메인">✿</a>
+    <a class="flower-logo" href="./" aria-label="배롱 FLOWER DIARY 메인"><span class="fl">✿</span><span class="wm" data-site="logo-text">배롱</span></a>
     <nav class="flower-nav" aria-label="메인 메뉴">
       <a data-nav="home" href="./">메인</a>
       <a data-nav="profile" href="./profile/">프로필</a>
@@ -169,7 +169,6 @@
       <a data-nav="dress" href="./dress/">옷장</a>
     </nav>
     <div class="flower-tools">
-      <p class="flower-header-note">a page for baerong <span>♡</span></p>
       <button class="dk-toggle" id="dkToggle" type="button" aria-label="다크 모드 전환"><i id="dkKnob">☾</i></button>
       <button class="ask" type="button" onclick="openAsk()">✉ 문의</button>
     </div>
@@ -181,14 +180,14 @@
       <span class="paper-doodle paper-doodle-heart" aria-hidden="true">♡</span>
       <span class="paper-doodle paper-doodle-flower" aria-hidden="true">✿</span>
 
-      <p class="paper-index">PROFILE NOTE · VOL. 01</p>
+      <p class="paper-index" data-site="hd-profile-idx">PROFILE NOTE · VOL. 01</p>
 
       <div class="paper-name">
         <div>
           <small>NICKNAME</small>
           <h1 data-hook="info-name">배롱</h1>
         </div>
-        <span>Baerong&apos;s soft diary</span>
+        <span data-site="main-sub">Baerong&apos;s soft diary</span>
       </div>
 
       <p class="paper-bio" data-hook="bio">당신과 행복한 하루를 만들고 싶은 배롱입니다 🍀</p>
@@ -204,7 +203,7 @@
       <section class="today-card" aria-label="오늘의 방송">
         <div class="today-head">
           <span>TODAY</span>
-          <b>오늘의 방송</b>
+          <b data-site="lbl-today">오늘의 방송</b>
         </div>
         <div class="today-body" id="todayBody">불러오는 중…</div>
         <p class="today-note">이번 주 · 한 달 일정은 <a href="./schedule/" style="color:var(--main-deep);font-weight:800">일정</a>에서 확인해 주세요</p>
@@ -216,7 +215,7 @@
       </div>
     </aside>
 
-    <p class="flower-message">BAERONG</p>
+    <p class="flower-message" data-hook="info-en">BAERONG</p>
 
     <aside class="flower-side-menu">
       <p>MENU</p>
@@ -228,15 +227,15 @@
     </aside>
 
     <div class="flower-bottom-copy" aria-hidden="true">
-      <span>BE SWEET</span><i>♡</i><span>STAY A WHILE</span>
+      <span id="copy1">BE SWEET</span><i>♡</i><span id="copy2">STAY A WHILE</span>
     </div>
   </div>
 </main>
 
 <div class="askmask" id="askmask">
   <div class="askmodal">
-    <h3>쪽지 남기기</h3>
-    <p>배롱에게 하고 싶은 말을 남겨주세요. 익명으로 전달돼요 🍀</p>
+    <h3 data-site="ask-title">쪽지 남기기</h3>
+    <p data-site="ask-desc">배롱에게 하고 싶은 말을 남겨주세요. 익명으로 전달돼요 🍀</p>
     <textarea id="askmsg" placeholder="여기에 적어주세요..."></textarea>
     <div class="askbtns">
       <button class="no" type="button" onclick="closeAsk()">취소</button>
@@ -249,33 +248,19 @@
 <script src="./supabase.js"></script>
 <script src="./site.js"></script>
 <script>
-var DEF = {
-  'soop-id': 'baerong2',
-  'info-name': '배롱',
-  'bio': '당신과 행복한 하루를 만들고 싶은 배롱입니다 🍀',
-  'info-birth': '08.18', 'info-debut': '2024.09.23',
-  'info-content': '게임 & 소통 & 풀트', 'info-mbti': 'IST(F)J', 'info-fandom': 'ε:',
-  'days': '0,1,2,3,4,5,6',
-  'sched-note': '매일 8~9시 사이 (랜덤 휴방)',
-  'link-soop': 'https://www.sooplive.com/station/baerong2',
-  'link-discord': 'https://discord.gg/tEsU79stA',
-  'link-fancim': 'https://fancim.me/celeb/profile.aspx?url=504450',
-  'link-youtube': '', 'link-x': ''
-};
-var P = {};
-function val(k){ var v = asText(P[k]).trim(); return v || (DEF[k] || ''); }
+/* 기본값·유틸·사이트 전역 적용은 site.js 담당 (DEF / pv / applySite) */
 
 function renderHooks(){
   document.querySelectorAll('[data-hook]').forEach(function(el){
-    var v = val(el.getAttribute('data-hook'));
+    var v = pv(el.getAttribute('data-hook'));
     if (v !== '') el.textContent = v;
   });
 }
 function renderDday(){
-  var b = ddayFromMMDD(val('info-birth'));
+  var b = ddayFromMMDD(pv('info-birth'));
   var eb = document.getElementById('dd-birth');
   if (eb){ if (b === null){ eb.style.display='none'; } else { eb.style.display=''; eb.textContent = ddLabel(b); } }
-  var a = anniversary(val('info-debut'));
+  var a = anniversary(pv('info-debut'));
   var ed = document.getElementById('dd-debut');
   if (ed){
     if (!a){ ed.style.display='none'; }
@@ -285,7 +270,7 @@ function renderDday(){
 function renderLinks(){
   var defs = [['SOOP','link-soop'],['DISCORD','link-discord'],['FANCIM','link-fancim'],['YOUTUBE','link-youtube'],['X','link-x']];
   var html = defs.map(function(d){
-    var u = val(d[1]);
+    var u = pv(d[1]);
     return u ? '<a href="' + esc(u) + '" target="_blank" rel="noreferrer">' + d[0] + ' <span>↗</span></a>' : '';
   }).filter(Boolean).slice(0, 3).join('');
   if (html) document.getElementById('mainLinks').innerHTML = html;
@@ -295,7 +280,7 @@ async function renderToday(){
   var now = new Date();
   var key = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
   var rows = [];
-  try { rows = await fetchAll('schedule', { order:'date', asc:true }) || []; } catch(e){ rows = []; }
+  try { rows = (await fetchAll('schedule', { order:'date', asc:true })) || []; } catch(e){ rows = []; }
   var todays = rows.filter(function(r){ return asText(r.date) === key; });
 
   if (todays.length){
@@ -308,20 +293,16 @@ async function renderToday(){
     return;
   }
   /* 등록된 일정이 없으면 방송 요일 기준 안내 */
-  var days = asText(val('days')).split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+  var days = pv('days').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
   var idx = (now.getDay() + 6) % 7;              /* 0=월 … 6=일 */
-  var on = days.indexOf(String(idx)) !== -1;
-  box.innerHTML = on
-    ? '방송 예정이에요<em>' + esc(val('sched-note')) + '</em>'
+  box.innerHTML = (days.indexOf(String(idx)) !== -1)
+    ? '방송 예정이에요<em>' + esc(pv('sched-note')) + '</em>'
     : '오늘은 휴방이에요<em>REST DAY</em>';
 }
 
 async function load(){
-  try {
-    const { data } = await db.from('profile').select('data').eq('id',1).single();
-    P = (data && data.data) || {};
-  } catch(e){ P = {}; }
-  try { renderHooks(); renderDday(); renderLinks(); } catch(e){ console.error(e); }
+  await loadProfile();
+  try { applySite(); renderHooks(); renderDday(); renderLinks(); } catch(e){ console.error(e); }
   try { await renderToday(); } catch(e){ document.getElementById('todayBody').textContent = '일정을 불러오지 못했어요'; }
   markReady();
 }

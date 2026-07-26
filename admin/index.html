@@ -101,6 +101,8 @@
       <button class="tab-btn" onclick="switchTab('work',this)">⚡ 업보</button>
       <button class="tab-btn" onclick="switchTab('dress',this)">👗 옷장</button>
       <button class="tab-btn" onclick="switchTab('inquiry',this)">✉️ 문의</button>
+      <button class="tab-btn" onclick="switchTab('site',this)">🌸 사이트</button>
+      <button class="tab-btn" onclick="switchTab('copy',this)">📄 문구</button>
       <button class="tab-btn" onclick="switchTab('theme',this)">🎨 테마</button>
     </div>
   </div>
@@ -155,6 +157,11 @@
         <div class="form-field"><label class="input-label">팬닉 (팬 애칭)</label><input class="input" id="f-info-fandom" type="text" placeholder="ε:"></div>
         <div class="form-field"><label class="input-label">소속</label><input class="input" id="f-info-agency" type="text" placeholder="개인세"></div>
         <div class="form-field full"><label class="input-label">주력 게임</label><input class="input" id="f-info-game" type="text" placeholder="배틀그라운드 · 마인크래프트 · 롤토체스"></div>
+        <div class="form-field full">
+          <label class="input-label">추가 항목 (원하는 만큼)</label>
+          <textarea class="input" id="f-info-extra" rows="3" placeholder="클랜:클랜 이름&#10;마크 서버:서버 주소&#10;키:169cm"></textarea>
+          <div class="hint"><b>규격</b> — 한 줄에 하나씩 <code>항목이름:내용</code>. 프로필 페이지 “주력 게임” 아래에 줄로 붙어요.</div>
+        </div>
         <div class="form-field full">
           <label class="input-label">특징 태그</label>
           <input class="input" id="f-info-tags" type="text" placeholder="달달보이스, 잔잔함, 바보스러움, 멘헤라">
@@ -256,10 +263,10 @@
 
     <div class="card">
       <div class="card-title">♡ TMI</div>
-      <div class="form-grid">
-        <div class="form-field"><label class="input-label">좋아하는 음식</label><input class="input" id="f-tmi-food" type="text" placeholder="예: 마라탕"></div>
-        <div class="form-field"><label class="input-label">요즘 듣는 노래</label><input class="input" id="f-tmi-song" type="text" placeholder="예: 노래 제목 - 가수"></div>
-        <div class="form-field full"><label class="input-label">최근 본 것</label><input class="input" id="f-tmi-book" type="text" placeholder="예: 요즘 보는 드라마/책"></div>
+      <div class="form-field">
+        <label class="input-label">TMI 목록</label>
+        <textarea class="input" id="f-tmi" rows="5" placeholder="좋아하는 음식:마라탕&#10;요즘 듣는 노래:노래 제목 - 가수&#10;최근 본 것:드라마 제목"></textarea>
+        <div class="hint"><b>규격</b> — 한 줄에 하나씩 <code>항목이름:내용</code>. 항목 이름도 자유롭게 바꿀 수 있어요.<br>줄을 늘리면 프로필에 그만큼 늘어나고, 지우면 사라져요.</div>
       </div>
       <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveLocalProfile()">저장 ♡</button></div>
     </div>
@@ -454,6 +461,146 @@
     </div>
   </div>
 
+
+  <!-- ═══ 사이트 탭 ═══ -->
+  <div class="tab-panel" id="tab-site">
+    <div class="card">
+      <div class="card-title">🖼 메인 배경 사진</div>
+      <div class="hint" style="margin-bottom:12px">
+        <b>메인 화면 + 모든 페이지 배경</b>에 같이 쓰이는 사진이에요. 비우면 처음 넣어드린 배롱 사진으로 돌아갑니다.<br>
+        💡 SOOP <b>비공개 게시판</b>에 사진을 올린 뒤 <b>우클릭 → “이미지 주소 복사”</b> 해서 붙여넣으세요. 가로로 넓은 사진(16:9 이상) 권장.
+      </div>
+      <div class="form-field">
+        <label class="input-label">배경 이미지 주소 (URL)</label>
+        <input class="input" id="f-site-bg" type="url" placeholder="비우면 기본 배롱 사진" oninput="previewBg()">
+      </div>
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="input-label">사진 위치 (얼굴이 잘리면 조절)</label>
+          <select class="input" id="f-site-bg-pos" onchange="previewBg()">
+            <option value="center 10%">위쪽</option>
+            <option value="center 26%">조금 위 (기본)</option>
+            <option value="center 40%">가운데 위</option>
+            <option value="center center">정가운데</option>
+            <option value="center 70%">아래쪽</option>
+            <option value="left center">왼쪽</option>
+            <option value="right center">오른쪽</option>
+          </select>
+          <div class="hint">인물이 잘리면 여기서 위/아래로 옮겨보세요.</div>
+        </div>
+        <div class="form-field">
+          <label class="input-label">사진 연하게 (0~100)</label>
+          <input class="input" id="f-site-bg-wash" type="number" min="0" max="100" placeholder="80" oninput="previewBg()">
+          <div class="hint">숫자가 <b>클수록 사진이 연해지고</b> 글씨가 잘 보여요. 기본 80. 사진을 진하게 보이고 싶으면 50~60.</div>
+        </div>
+      </div>
+      <div class="form-field">
+        <label class="input-label">미리보기</label>
+        <div id="bg-prev" style="height:150px;border:1.5px solid var(--main-light);border-radius:10px;background-size:cover;background-repeat:no-repeat"></div>
+      </div>
+      <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveLocalProfile()">저장 ♡</button></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">✿ 로고 · 메인 문구</div>
+      <div class="form-grid">
+        <div class="form-field"><label class="input-label">상단바 로고 글자</label><input class="input" id="f-logo-text" type="text" placeholder="배롱"></div>
+        <div class="form-field"><label class="input-label">메인 종이 부제</label><input class="input" id="f-main-sub" type="text" placeholder="Baerong's soft diary"></div>
+        <div class="form-field full">
+          <label class="input-label">메인 하단 카피 (2개)</label>
+          <input class="input" id="f-main-copy" type="text" placeholder="BE SWEET|STAY A WHILE">
+          <div class="hint">가운데 <code>|</code> 로 나눠서 두 문구. 하트(♡) 양옆에 놓여요.</div>
+        </div>
+        <div class="form-field full">
+          <label class="input-label">사진 위 큰 워드마크</label>
+          <div class="hint" style="margin-top:0">🏠 메인 탭의 <b>“영문 이름”</b> 값이 그대로 쓰여요. 거기서 바꿔주세요.</div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveLocalProfile()">저장 ♡</button></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📮 푸터 · 문의 모달</div>
+      <div class="form-grid">
+        <div class="form-field full"><label class="input-label">푸터 손글씨 문구</label><input class="input" id="f-footer-note" type="text" placeholder="be sweet, stay a while ♡"></div>
+        <div class="form-field full"><label class="input-label">푸터 저작권 문구</label><input class="input" id="f-footer-copy" type="text" placeholder="© 2026 배롱 (BAERONG) Official."></div>
+        <div class="form-field full">
+          <label class="input-label">비즈니스 문의 이메일</label>
+          <input class="input" id="f-footer-email" type="email" placeholder="baerong2486@gmail.com">
+          <div class="hint">비우면 “문의는 상단 ✉ 문의 버튼을 이용해 주세요” 로 바뀌어요.</div>
+        </div>
+        <div class="form-field full"><label class="input-label">페이지 하단 큰 흐린 글씨</label><input class="input" id="f-ghost-text" type="text" placeholder="baerong ♡"></div>
+        <div class="form-field"><label class="input-label">문의 모달 제목</label><input class="input" id="f-ask-title" type="text" placeholder="쪽지 남기기"></div>
+        <div class="form-field"><label class="input-label">문의 모달 설명</label><input class="input" id="f-ask-desc" type="text" placeholder="배롱에게 하고 싶은 말을 남겨주세요."></div>
+      </div>
+      <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveLocalProfile()">저장 ♡</button></div>
+    </div>
+  </div>
+
+  <!-- ═══ 문구 탭 ═══ -->
+  <div class="tab-panel" id="tab-copy">
+    <div class="card">
+      <div class="card-title">📄 페이지 머리말</div>
+      <div class="hint" style="margin-bottom:12px">각 페이지 맨 위에 뜨는 <b>작은 영문 라벨 · 큰 제목 · 손글씨 부제 · 설명문</b>이에요.</div>
+
+      <div class="form-field"><label class="input-label">프로필 — 작은 라벨</label><input class="input" id="f-hd-profile-idx" type="text" placeholder="PROFILE NOTE · VOL. 01"></div>
+      <div class="hint" style="margin:-6px 0 16px">프로필은 이름이 제목 역할이라 라벨만 있어요. (메인 종이 위에도 같이 떠요)</div>
+
+      <div class="form-grid" style="border-top:1px dashed var(--main-light);padding-top:14px">
+        <div class="form-field"><label class="input-label">일정 — 작은 라벨</label><input class="input" id="f-hd-schedule-idx" type="text" placeholder="WEEKLY PLANNER · VOL. 02"></div>
+        <div class="form-field"><label class="input-label">일정 — 제목</label><input class="input" id="f-hd-schedule-title" type="text" placeholder="일정"></div>
+        <div class="form-field"><label class="input-label">일정 — 손글씨 부제</label><input class="input" id="f-hd-schedule-en" type="text" placeholder="baerong's schedule"></div>
+        <div class="form-field full"><label class="input-label">일정 — 설명문</label><textarea class="input" id="f-hd-schedule-desc" rows="2"></textarea></div>
+      </div>
+
+      <div class="form-grid" style="border-top:1px dashed var(--main-light);padding-top:14px;margin-top:8px">
+        <div class="form-field"><label class="input-label">공지 — 작은 라벨</label><input class="input" id="f-hd-notice-idx" type="text" placeholder="NOTICE BOARD · VOL. 03"></div>
+        <div class="form-field"><label class="input-label">공지 — 제목</label><input class="input" id="f-hd-notice-title" type="text" placeholder="공지"></div>
+        <div class="form-field"><label class="input-label">공지 — 손글씨 부제</label><input class="input" id="f-hd-notice-en" type="text" placeholder="pinned notes"></div>
+        <div class="form-field full"><label class="input-label">공지 — 설명문</label><textarea class="input" id="f-hd-notice-desc" rows="2"></textarea></div>
+      </div>
+
+      <div class="form-grid" style="border-top:1px dashed var(--main-light);padding-top:14px;margin-top:8px">
+        <div class="form-field"><label class="input-label">업보 — 작은 라벨</label><input class="input" id="f-hd-work-idx" type="text" placeholder="KARMA LEDGER · VOL. 04"></div>
+        <div class="form-field"><label class="input-label">업보 — 제목</label><input class="input" id="f-hd-work-title" type="text" placeholder="업보"></div>
+        <div class="form-field"><label class="input-label">업보 — 손글씨 부제</label><input class="input" id="f-hd-work-en" type="text" placeholder="who did what ♡"></div>
+        <div class="form-field full"><label class="input-label">업보 — 설명문</label><textarea class="input" id="f-hd-work-desc" rows="2"></textarea></div>
+      </div>
+
+      <div class="form-grid" style="border-top:1px dashed var(--main-light);padding-top:14px;margin-top:8px">
+        <div class="form-field"><label class="input-label">옷장 — 작은 라벨</label><input class="input" id="f-hd-dress-idx" type="text" placeholder="OUTFIT ALBUM · VOL. 05"></div>
+        <div class="form-field"><label class="input-label">옷장 — 제목</label><input class="input" id="f-hd-dress-title" type="text" placeholder="옷장"></div>
+        <div class="form-field"><label class="input-label">옷장 — 손글씨 부제</label><input class="input" id="f-hd-dress-en" type="text" placeholder="baerong's closet"></div>
+        <div class="form-field full"><label class="input-label">옷장 — 설명문</label><textarea class="input" id="f-hd-dress-desc" rows="2"></textarea></div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;margin-top:8px"><button class="btn btn-primary" onclick="saveLocalProfile()">저장 ♡</button></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🏷 섹션 이름</div>
+      <div class="hint" style="margin-bottom:12px">프로필·일정·옷장 안에 있는 <b>작은 제목들</b>이에요. 비우면 기본 이름이 떠요.</div>
+      <div class="form-grid">
+        <div class="form-field"><label class="input-label">프로필 정보</label><input class="input" id="f-sec-profile" type="text" placeholder="프로필"></div>
+        <div class="form-field"><label class="input-label">능력치</label><input class="input" id="f-sec-stats" type="text" placeholder="능력치"></div>
+        <div class="form-field"><label class="input-label">좋아·싫어</label><input class="input" id="f-sec-likes" type="text" placeholder="좋아 · 싫어"></div>
+        <div class="form-field"><label class="input-label">TMI</label><input class="input" id="f-sec-tmi" type="text" placeholder="TMI"></div>
+        <div class="form-field"><label class="input-label">방송 요일</label><input class="input" id="f-sec-week" type="text" placeholder="방송 요일"></div>
+        <div class="form-field"><label class="input-label">목표</label><input class="input" id="f-sec-goal" type="text" placeholder="목표"></div>
+        <div class="form-field"><label class="input-label">하고픈 말</label><input class="input" id="f-sec-about" type="text" placeholder="하고픈 말"></div>
+        <div class="form-field"><label class="input-label">다시보기</label><input class="input" id="f-sec-vod" type="text" placeholder="다시보기"></div>
+        <div class="form-field"><label class="input-label">관련 링크</label><input class="input" id="f-sec-links" type="text" placeholder="관련 링크"></div>
+        <div class="form-field"><label class="input-label">좋아하는 것 (소제목)</label><input class="input" id="f-lbl-like" type="text" placeholder="🍀 좋아하는 것"></div>
+        <div class="form-field"><label class="input-label">싫어하는 것 (소제목)</label><input class="input" id="f-lbl-dislike" type="text" placeholder="🥀 싫어하는 것"></div>
+        <div class="form-field"><label class="input-label">메인 “오늘의 방송”</label><input class="input" id="f-lbl-today" type="text" placeholder="오늘의 방송"></div>
+        <div class="form-field"><label class="input-label">일정 “이번 주”</label><input class="input" id="f-sec-thisweek" type="text" placeholder="이번 주"></div>
+        <div class="form-field"><label class="input-label">일정 “다가오는 일정”</label><input class="input" id="f-sec-upcoming" type="text" placeholder="다가오는 일정"></div>
+        <div class="form-field"><label class="input-label">옷장 “새 옷” 버튼</label><input class="input" id="f-lbl-new" type="text" placeholder="✨ 새 옷"></div>
+        <div class="form-field"><label class="input-label">옷장 “기존 옷” 버튼</label><input class="input" id="f-lbl-old" type="text" placeholder="🗂 기존 옷"></div>
+      </div>
+      <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveLocalProfile()">저장 ♡</button></div>
+    </div>
+  </div>
+
   <!-- ═══ 테마 탭 ═══ -->
   <div class="tab-panel" id="tab-theme">
     <div class="card">
@@ -498,15 +645,22 @@ const ADMIN_PASSWORD = '1234';
 
 /* ★ 페이지가 읽는 키 ↔ 아래 배열 ↔ f-{키} 입력칸 : 세 집합이 정확히 같아야 함 (§2-B.1) */
 const profileKeys = [
-  'avatar','soop-id',
-  'info-name','info-en','bio',
-  'info-birth','info-debut','info-content','info-mbti','info-fandom','info-agency','info-game','info-tags',
-  'quote','msg',
-  'like-list','dislike-list','stats','milestones',
-  'tmi-food','tmi-song','tmi-book',
-  'days','sched-note',
-  'link-soop','link-discord','link-fancim','link-youtube','link-x',
-  'theme-main','theme-main-dark','theme-main-deep','theme-main-light','theme-bg','theme-logo'
+  'avatar', 'soop-id', 'info-name', 'info-en', 'bio',
+  'quote', 'info-birth', 'info-debut', 'info-content', 'info-mbti',
+  'info-fandom', 'info-agency', 'info-game', 'info-extra', 'info-tags',
+  'stats', 'like-list', 'dislike-list', 'tmi', 'milestones',
+  'msg', 'days', 'sched-note', 'link-soop', 'link-discord',
+  'link-fancim', 'link-youtube', 'link-x', 'site-bg', 'site-bg-pos',
+  'site-bg-wash', 'logo-text', 'main-sub', 'main-copy', 'ghost-text',
+  'footer-note', 'footer-copy', 'footer-email', 'ask-title', 'ask-desc',
+  'hd-profile-idx', 'hd-schedule-idx', 'hd-schedule-title', 'hd-schedule-en', 'hd-schedule-desc',
+  'hd-notice-idx', 'hd-notice-title', 'hd-notice-en', 'hd-notice-desc', 'hd-work-idx',
+  'hd-work-title', 'hd-work-en', 'hd-work-desc', 'hd-dress-idx', 'hd-dress-title',
+  'hd-dress-en', 'hd-dress-desc', 'sec-profile', 'sec-stats', 'sec-likes',
+  'sec-tmi', 'sec-week', 'sec-goal', 'sec-about', 'sec-vod',
+  'sec-links', 'lbl-like', 'lbl-dislike', 'lbl-today', 'sec-thisweek',
+  'sec-upcoming', 'lbl-new', 'lbl-old', 'theme-main', 'theme-main-dark',
+  'theme-main-deep', 'theme-main-light', 'theme-bg', 'theme-logo'
 ];
 
 function tryLogin(){
@@ -548,12 +702,26 @@ async function loadProfileFields(){
   const days = String(saved.days || '').split(',').map(x => x.trim());
   document.querySelectorAll('.day-chk').forEach(c => { c.checked = days.includes(c.value); });
   previewAvatar();
+  previewBg();
   syncPickers();
 }
 function soopAvatarUrl(id){
   id = String(id || '').trim().toLowerCase();
   if (id.length < 2) return '';
   return 'https://profile.img.sooplive.co.kr/LOGO/' + id.slice(0,2) + '/' + id + '/' + id + '.jpg';
+}
+function previewBg(){
+  var url = (document.getElementById('f-site-bg')?.value || '').trim() || '../assets/baerong-blossom.webp';
+  var pos = document.getElementById('f-site-bg-pos')?.value || 'center 26%';
+  var w = parseFloat(document.getElementById('f-site-bg-wash')?.value);
+  if (isNaN(w)) w = 80;
+  var a = Math.max(0, Math.min(100, w)) / 100;
+  var el = document.getElementById('bg-prev');
+  if (!el) return;
+  el.style.backgroundImage =
+    'linear-gradient(180deg, rgba(255,251,252,' + a + '), rgba(243,232,237,' + Math.min(1, a + .08) + ')), url("' + url.replace(/"/g,'%22') + '")';
+  el.style.backgroundPosition = 'center, ' + pos;
+  el.style.backgroundSize = '100% 100%, cover';
 }
 function previewAvatar(){
   const direct = (document.getElementById('f-avatar')?.value || '').trim();
