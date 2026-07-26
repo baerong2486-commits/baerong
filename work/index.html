@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>배롱 · 업보</title>
+  <meta name="description" content="배롱 FLOWER DIARY — 업보 장부">
+  <link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/ba/baerong2/baerong2.jpg">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .up-bar { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:16px; }
+    .up-search {
+      flex:1; min-width:180px; padding:11px 16px; box-sizing:border-box;
+      border:1.5px solid var(--pline); border-radius:999px;
+      background:color-mix(in srgb, var(--card) 80%, transparent);
+      font-family:inherit; font-size:13.5px; color:var(--text); outline:none;
+    }
+    .up-search:focus { border-color:var(--main-dark); }
+    .up-upd { font:800 10.5px/1 var(--f-micro); letter-spacing:.1em; color:var(--main-dark); white-space:nowrap; }
+
+    .vgrid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+    @media(max-width:900px){ .vgrid{ grid-template-columns:repeat(3,1fr); } }
+    @media(max-width:620px){ .vgrid{ grid-template-columns:repeat(2,1fr); gap:9px; } }
+
+    .vcard {
+      position:relative; padding:20px 10px 14px; text-align:center; cursor:pointer;
+      border:1px solid var(--pline); border-radius:7px 7px 10px 10px;
+      background:color-mix(in srgb, var(--card) 80%, transparent);
+      transition:var(--transition);
+    }
+    .vcard::before {
+      content:''; position:absolute; left:10px; right:10px; top:-5px; height:12px;
+      background:radial-gradient(circle, #8c7780 0 1.5px, transparent 1.8px) 0 0/15px 12px repeat-x; opacity:.5;
+    }
+    .vcard:hover { transform:translateY(-3px); box-shadow:var(--shadow-hover); border-color:var(--main-dark); }
+    .vav, .vfb {
+      width:58px; height:58px; border-radius:50%; margin:0 auto 9px; display:block;
+      object-fit:cover; border:3px solid var(--main-light); background:var(--main-light);
+    }
+    .vfb { display:grid; place-items:center; color:var(--main-deep); font-size:22px; font-weight:800; }
+    .vn { font-size:13.5px; font-weight:800; color:var(--text); word-break:keep-all; }
+    .vi { font:700 10.5px/1.5 var(--f-micro); color:var(--text-soft); margin:2px 0 8px; min-height:15px; }
+    .vt { display:inline-block; padding:3px 13px; border-radius:999px; background:var(--main-dark); color:#fff; font-size:11.5px; font-weight:800; }
+
+    .ov { position:fixed; inset:0; background:rgba(50,36,42,.5); display:none; align-items:center; justify-content:center; z-index:800; padding:20px; }
+    .ov.on { display:flex; }
+    .mo { position:relative; background:var(--card); width:min(420px,100%); max-height:84vh; display:flex; flex-direction:column; border:1px solid var(--pline); box-shadow:0 22px 60px rgba(0,0,0,.32); }
+    .mo-top { display:flex; align-items:center; gap:12px; padding:20px 22px 15px; border-bottom:1px dashed var(--pline); }
+    .mo-av, .mo-fb { width:48px; height:48px; border-radius:50%; object-fit:cover; border:3px solid var(--main-light); background:var(--main-light); flex:none; }
+    .mo-fb { display:grid; place-items:center; color:var(--main-deep); font-size:19px; font-weight:800; }
+    .mo-n { font-size:17px; font-weight:900; color:var(--main-deep); line-height:1.2; }
+    .mo-i { font:700 11px/1.5 var(--f-micro); color:var(--text-soft); }
+    .mo-x { margin-left:auto; background:none; border:0; font-size:20px; color:var(--text-soft); cursor:pointer; line-height:1; }
+    .mo-body { padding:14px 18px 20px; overflow-y:auto; }
+    .krow { display:flex; align-items:center; gap:9px; padding:10px 13px; margin-bottom:7px; border:1px dashed var(--pline); background:color-mix(in srgb, var(--main-light) 50%, transparent); }
+    .krow .kn { flex:1; font-size:13.5px; color:var(--text); font-weight:600; word-break:keep-all; }
+    .krow .kev { flex:none; font:800 9.5px/1.6 var(--f-micro); color:#96751e; background:#fbf0d5; padding:1px 8px; border-radius:999px; }
+    .krow .kc { flex:none; min-width:44px; text-align:center; font-size:13px; font-weight:900; color:var(--main-deep); background:var(--card); border:1.5px solid var(--main-light); border-radius:999px; padding:3px 11px; }
+  </style>
+</head>
+<body class="sub" data-page="work">
+<script>if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');</script>
+
+<header class="flower-header">
+    <a class="flower-logo" href="../" aria-label="배롱 FLOWER DIARY 메인">✿</a>
+    <nav class="flower-nav" aria-label="메인 메뉴">
+      <a data-nav="home" href="../">메인</a>
+      <a data-nav="profile" href="../profile/">프로필</a>
+      <a data-nav="schedule" href="../schedule/">일정</a>
+      <a data-nav="notice" href="../notice/">공지</a>
+      <a data-nav="work" href="../work/">업보</a>
+      <a data-nav="dress" href="../dress/">옷장</a>
+    </nav>
+    <div class="flower-tools">
+      <p class="flower-header-note">a page for baerong <span>♡</span></p>
+      <button class="dk-toggle" id="dkToggle" type="button" aria-label="다크 모드 전환"><i id="dkKnob">☾</i></button>
+      <button class="ask" type="button" onclick="openAsk()">✉ 문의</button>
+    </div>
+  </header>
+
+<main class="dwrap wrap stagger">
+
+  <section class="dsheet">
+    <span class="tape r"></span>
+    <span class="doodle d1">✦</span>
+    <div class="sheet-head">
+      <p class="sheet-index">KARMA LEDGER · VOL. 04</p>
+      <div class="sheet-title-row">
+        <h1 class="sheet-title">업보</h1>
+        <span class="sheet-en">who did what ♡</span>
+      </div>
+      <p class="sheet-desc">시청자분들이 쌓아 올린 업보를 한 장에 정리했어요. 카드를 누르면 항목별 기록이 펼쳐져요.</p>
+      <div class="sheet-rule"></div>
+    </div>
+
+    <div class="up-bar">
+      <input class="up-search" id="upSearch" type="search" placeholder="🔍 닉네임 · 아이디 검색" aria-label="시청자 검색">
+      <span class="up-upd" id="upUpd"></span>
+    </div>
+    <div class="vgrid" id="vgrid"><div class="spinner" style="grid-column:1/-1"></div></div>
+  </section>
+
+</main>
+
+<div class="ov" id="ov" onclick="if(event.target===this)closeMo()">
+  <div class="mo">
+    <div class="mo-top" id="moTop"></div>
+    <div class="mo-body" id="moBody"></div>
+  </div>
+</div>
+
+<div class="ghost-mark" aria-hidden="true">baerong ♡</div>
+<footer>
+  <span class="fnote">be sweet, stay a while ♡</span>
+  © 2026 배롱 (BAERONG) Official.<br>
+  비즈니스 문의 — baerong2486@gmail.com
+</footer>
+<div class="askmask" id="askmask">
+  <div class="askmodal">
+    <h3>쪽지 남기기</h3>
+    <p>배롱에게 하고 싶은 말을 남겨주세요. 익명으로 전달돼요 🍀</p>
+    <textarea id="askmsg" placeholder="여기에 적어주세요..."></textarea>
+    <div class="askbtns">
+      <button class="no" type="button" onclick="closeAsk()">취소</button>
+      <button class="yes" type="button" onclick="sendAsk()">붙이기 ♡</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../supabase.js"></script>
+<script src="../site.js"></script>
+<script>
+var viewers = [], types = [], counts = [];
+
+function total(vid){
+  return counts.filter(function(c){ return c.viewer_id === vid && c.count > 0; })
+               .reduce(function(s,c){ return s + c.count; }, 0);
+}
+
+function render(list){
+  var g = document.getElementById('vgrid');
+  if (!list.length){
+    g.innerHTML = '<div style="grid-column:1/-1"><div class="empty"><div class="empty-icon">✿</div>아직 기록된 시청자가 없어요</div></div>';
+    try { initIframeResize(); } catch(e){}
+    return;
+  }
+  g.innerHTML = list.map(function(v){
+    var av = soopAvatar(v.soop_id);
+    var ini = esc(asText(v.nickname).charAt(0) || '?');
+    var avh = av
+      ? '<img class="vav" src="' + esc(av) + '" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.outerHTML=\'<div class=&quot;vfb&quot;>' + ini + '</div>\'">'
+      : '<div class="vfb">' + ini + '</div>';
+    return '<div class="vcard" onclick="openMo(' + v.id + ')">' + avh +
+      '<div class="vn">' + esc(asText(v.nickname)) + '</div>' +
+      '<div class="vi">' + (asText(v.soop_id) ? esc(asText(v.soop_id)) : '&nbsp;') + '</div>' +
+      '<span class="vt">업보 ' + total(v.id) + '</span></div>';
+  }).join('');
+  try { initIframeResize(); } catch(e){}
+}
+
+function openMo(vid){
+  var v = viewers.find(function(x){ return x.id === vid; });
+  if (!v) return;
+  var av = soopAvatar(v.soop_id);
+  var ini = esc(asText(v.nickname).charAt(0) || '?');
+  var avh = av
+    ? '<img class="mo-av" src="' + esc(av) + '" alt="" referrerpolicy="no-referrer" onerror="this.outerHTML=\'<div class=&quot;mo-fb&quot;>' + ini + '</div>\'">'
+    : '<div class="mo-fb">' + ini + '</div>';
+  document.getElementById('moTop').innerHTML = avh +
+    '<div><div class="mo-n">' + esc(asText(v.nickname)) + '</div>' +
+    (asText(v.soop_id) ? '<div class="mo-i">' + esc(asText(v.soop_id)) + '</div>' : '') + '</div>' +
+    '<button class="mo-x" type="button" onclick="closeMo()" aria-label="닫기">✕</button>';
+
+  var mine = {};
+  counts.filter(function(c){ return c.viewer_id === vid; }).forEach(function(c){ mine[c.type_id] = c.count; });
+  var rows = types.filter(function(t){ return (mine[t.id] || 0) > 0; }).map(function(t){
+    return '<div class="krow"><span class="kn">' + esc(asText(t.name)) + '</span>' +
+      (asText(t.category) === '이벤트' ? '<span class="kev">이벤트</span>' : '') +
+      '<span class="kc">×' + mine[t.id] + '</span></div>';
+  }).join('');
+  document.getElementById('moBody').innerHTML = rows ||
+    '<div class="empty" style="padding:26px 10px">아직 쌓인 업보가 없어요 ♡</div>';
+  document.getElementById('ov').classList.add('on');
+}
+function closeMo(){ document.getElementById('ov').classList.remove('on'); }
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeMo(); });
+
+async function load(){
+  try {
+    var r = await Promise.all([
+      fetchAll('viewers',     { order:'sort_order', asc:true }),
+      fetchAll('upbo_types',  { order:'sort_order', asc:true }),
+      fetchAll('upbo_counts', { order:'id', asc:true })
+    ]);
+    viewers = r[0] || []; types = r[1] || []; counts = r[2] || [];
+  } catch(e){ viewers = []; types = []; counts = []; }
+
+  var latest = counts.reduce(function(m,c){ return (c.updated_at && c.updated_at > m) ? c.updated_at : m; }, '');
+  document.getElementById('upUpd').textContent = latest ? 'UPDATED ' + String(latest).slice(0,10) : '';
+
+  render(viewers);
+  document.getElementById('upSearch').addEventListener('input', function(e){
+    var q = (e.target.value || '').trim().toLowerCase();
+    render(viewers.filter(function(v){
+      return (asText(v.nickname) + ' ' + asText(v.soop_id)).toLowerCase().indexOf(q) !== -1;
+    }));
+  });
+  markReady();
+}
+load();
+</script>
+<script src="../fx.js"></script>
+<script src="../fxfb.js"></script>
+</body>
+</html>

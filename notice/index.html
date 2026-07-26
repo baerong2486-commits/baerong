@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>배롱 · 공지</title>
+  <meta name="description" content="배롱 FLOWER DIARY — 공지사항">
+  <link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/ba/baerong2/baerong2.jpg">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .nt-bar { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:14px; }
+    .nt-search {
+      flex:1; min-width:180px; padding:11px 16px; box-sizing:border-box;
+      border:1.5px solid var(--pline); border-radius:999px;
+      background:color-mix(in srgb, var(--card) 80%, transparent);
+      font-family:inherit; font-size:13.5px; color:var(--text); outline:none;
+    }
+    .nt-search:focus { border-color:var(--main-dark); }
+    .nt-count { font:800 10.5px/1 var(--f-micro); letter-spacing:.12em; color:var(--main-dark); white-space:nowrap; }
+
+    .nt {
+      position:relative; margin-bottom:10px; padding:16px 18px;
+      border:1px solid var(--pline);
+      background:color-mix(in srgb, var(--card) 78%, transparent);
+      cursor:pointer; transition:var(--transition);
+    }
+    .nt:hover { box-shadow:var(--shadow); transform:translateY(-2px); }
+    .nt.pin { border-left:5px solid var(--main-dark); background:color-mix(in srgb, var(--main-light) 62%, var(--card)); }
+    .nt-head { display:flex; align-items:center; gap:10px; }
+    .nt-pin { flex:none; padding:2px 9px; border-radius:999px; background:var(--main-dark); color:#fff; font:800 10px/1.6 var(--f-micro); letter-spacing:.06em; }
+    .nt-title { flex:1; min-width:0; font-size:14.5px; font-weight:800; color:var(--text); letter-spacing:-.02em; word-break:keep-all; }
+    .nt-thumb { flex:none; width:40px; height:40px; object-fit:cover; border:1px solid var(--pline); }
+    .nt-date { flex:none; font:800 10px/1 var(--f-micro); letter-spacing:.08em; color:var(--text-soft); }
+    .nt-arw { flex:none; color:var(--main-dark); font-size:15px; transition:transform .2s; }
+    .nt.open .nt-arw { transform:rotate(90deg); }
+    .nt-body { max-height:0; overflow:hidden; transition:max-height .32s ease; font-size:13.5px; line-height:1.85; color:var(--text-mid); white-space:pre-wrap; word-break:keep-all; }
+    .nt.open .nt-body { max-height:4000px; margin-top:13px; padding-top:13px; border-top:1px dashed var(--pline); }
+    .nt-img { display:block; max-width:100%; margin:0 auto 12px; border:1px solid var(--pline); }
+  </style>
+</head>
+<body class="sub" data-page="notice">
+<script>if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');</script>
+
+<header class="flower-header">
+    <a class="flower-logo" href="../" aria-label="배롱 FLOWER DIARY 메인">✿</a>
+    <nav class="flower-nav" aria-label="메인 메뉴">
+      <a data-nav="home" href="../">메인</a>
+      <a data-nav="profile" href="../profile/">프로필</a>
+      <a data-nav="schedule" href="../schedule/">일정</a>
+      <a data-nav="notice" href="../notice/">공지</a>
+      <a data-nav="work" href="../work/">업보</a>
+      <a data-nav="dress" href="../dress/">옷장</a>
+    </nav>
+    <div class="flower-tools">
+      <p class="flower-header-note">a page for baerong <span>♡</span></p>
+      <button class="dk-toggle" id="dkToggle" type="button" aria-label="다크 모드 전환"><i id="dkKnob">☾</i></button>
+      <button class="ask" type="button" onclick="openAsk()">✉ 문의</button>
+    </div>
+  </header>
+
+<main class="dwrap wrap stagger">
+
+  <section class="dsheet">
+    <span class="tape r"></span>
+    <span class="doodle d1">♡</span>
+    <div class="sheet-head">
+      <p class="sheet-index">NOTICE BOARD · VOL. 03</p>
+      <div class="sheet-title-row">
+        <h1 class="sheet-title">공지</h1>
+        <span class="sheet-en">pinned notes</span>
+      </div>
+      <p class="sheet-desc">채팅 규칙 · 시참 규칙 · 시그 이미지 · 구독 티콘 · 룰렛 확률 · 방셀 공지를 여기 붙여둬요. 제목을 누르면 내용이 펼쳐져요.</p>
+      <div class="sheet-rule"></div>
+    </div>
+
+    <div class="nt-bar">
+      <input class="nt-search" id="ntSearch" type="search" placeholder="🔍 공지 제목·내용 검색" aria-label="공지 검색">
+      <span class="nt-count" id="ntCount"></span>
+    </div>
+    <div id="ntList"><div class="spinner"></div></div>
+  </section>
+
+</main>
+
+<div class="ghost-mark" aria-hidden="true">baerong ♡</div>
+<footer>
+  <span class="fnote">be sweet, stay a while ♡</span>
+  © 2026 배롱 (BAERONG) Official.<br>
+  비즈니스 문의 — baerong2486@gmail.com
+</footer>
+<div class="askmask" id="askmask">
+  <div class="askmodal">
+    <h3>쪽지 남기기</h3>
+    <p>배롱에게 하고 싶은 말을 남겨주세요. 익명으로 전달돼요 🍀</p>
+    <textarea id="askmsg" placeholder="여기에 적어주세요..."></textarea>
+    <div class="askbtns">
+      <button class="no" type="button" onclick="closeAsk()">취소</button>
+      <button class="yes" type="button" onclick="sendAsk()">붙이기 ♡</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../supabase.js"></script>
+<script src="../site.js"></script>
+<script>
+var all = [];
+
+function imgsOf(n){
+  var arr = n.images;
+  if (Array.isArray(arr) && arr.length) return arr.map(asText).filter(Boolean);
+  var one = asText(n.image_url).trim();
+  return one ? [one] : [];
+}
+
+function render(list){
+  var el = document.getElementById('ntList');
+  document.getElementById('ntCount').textContent = '총 ' + list.length + '개';
+  if (!list.length){
+    el.innerHTML = '<div class="empty"><div class="empty-icon">✿</div>아직 붙여둔 공지가 없어요</div>';
+    try { initIframeResize(); } catch(e){}
+    return;
+  }
+  el.innerHTML = list.map(function(n){
+    var d = new Date(n.created_at);
+    var ds = isNaN(d) ? '' : (d.getFullYear() + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + String(d.getDate()).padStart(2,'0'));
+    var im = imgsOf(n);
+    var thumb = im.length ? '<img class="nt-thumb" src="' + esc(im[0]) + '" alt="" loading="lazy" referrerpolicy="no-referrer">' : '';
+    return '<div class="nt' + (n.pinned ? ' pin' : '') + '" onclick="this.classList.toggle(\'open\');setTimeout(function(){try{initIframeResize()}catch(e){}},340)">' +
+      '<div class="nt-head">' +
+        (n.pinned ? '<span class="nt-pin">고정</span>' : '') +
+        '<span class="nt-title">' + esc(asText(n.title)) + '</span>' + thumb +
+        '<span class="nt-date">' + ds + '</span><span class="nt-arw">›</span>' +
+      '</div>' +
+      '<div class="nt-body">' +
+        im.map(function(u){ return '<img class="nt-img" src="' + esc(u) + '" alt="" loading="lazy" referrerpolicy="no-referrer">'; }).join('') +
+        esc(asText(n.content)) +
+      '</div></div>';
+  }).join('');
+  try { initIframeResize(); } catch(e){}
+}
+
+function applyFilter(){
+  var q = (document.getElementById('ntSearch').value || '').trim().toLowerCase();
+  if (!q) { render(all); return; }
+  render(all.filter(function(n){
+    return (asText(n.title) + ' ' + asText(n.content)).toLowerCase().indexOf(q) !== -1;
+  }));
+}
+
+async function load(){
+  var rows = [];
+  try { rows = await fetchAll('notice', { order:'created_at', asc:false }) || []; } catch(e){ rows = []; }
+  all = rows.filter(function(n){ return n.pinned; }).concat(rows.filter(function(n){ return !n.pinned; }));
+  render(all);
+  document.getElementById('ntSearch').addEventListener('input', applyFilter);
+  markReady();
+}
+load();
+</script>
+<script src="../fx.js"></script>
+<script src="../fxfb.js"></script>
+</body>
+</html>

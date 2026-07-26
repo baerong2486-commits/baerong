@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>배롱 · Flower Diary</title>
+  <meta name="description" content="배롱 Flower Diary 메인 페이지">
+  <link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/ba/baerong2/baerong2.jpg">
+  <link rel="stylesheet" href="./style.css">
+  <style>
+    /* =========================================================
+       메인 전용 레이아웃 (상단바·색·공통 부품은 style.css)
+       ========================================================= */
+    .concept-two {
+      position:relative; width:100%; min-height:var(--screen-h);
+      overflow:hidden; isolation:isolate; background:var(--bg);
+    }
+    .flower-photo {
+      position:absolute; z-index:0; inset:0; width:100%; height:100%;
+      object-fit:cover; object-position:center 40%; transform:scale(1.015);
+    }
+    .flower-wash {
+      position:absolute; z-index:1; inset:0;
+      background:
+        linear-gradient(90deg, rgba(244,229,235,.21), rgba(223,217,222,.04) 55%, rgba(71,62,70,.12)),
+        linear-gradient(0deg, rgba(36,31,35,.17), transparent 50%);
+    }
+    body.dark .flower-wash {
+      background:
+        linear-gradient(90deg, rgba(40,32,38,.5), rgba(30,24,29,.36) 55%, rgba(20,16,19,.55)),
+        linear-gradient(0deg, rgba(16,12,15,.58), transparent 55%);
+    }
+
+    .flower-layout {
+      position:relative; z-index:2;
+      height:calc(var(--screen-h) - clamp(76px, 9.2vh, 104px));
+      opacity:0; transition:opacity .34s ease;
+    }
+    body.ready .flower-layout { opacity:1; }
+    @media (prefers-reduced-motion: reduce){ .flower-layout{ opacity:1; } }
+
+    /* ── 종이 (프로필 노트) ── */
+    .flower-paper {
+      position:absolute; left:clamp(20px,5.4vw,104px); top:35.5%;
+      width:clamp(360px,32.5vw,625px);
+      padding:clamp(24px,3.2vh,38px) clamp(24px,2.7vw,50px) clamp(20px,2.6vh,32px);
+      color:var(--text); background:color-mix(in srgb, var(--card) 94%, transparent);
+      box-shadow:0 26px 60px rgba(35,28,33,.21);
+      transform:translateY(-50%) rotate(-.35deg) scale(1.06);
+      transform-origin:center; backdrop-filter:blur(7px);
+    }
+    .flower-paper::before {
+      content:''; position:absolute; inset:0; pointer-events:none; opacity:.4;
+      background:repeating-linear-gradient(0deg, transparent 0 31px, var(--paper-rule) 31px 32px);
+    }
+    .flower-paper::after { content:''; position:absolute; inset:14px; pointer-events:none; border:1px solid var(--pline); }
+    .flower-paper > * { position:relative; z-index:2; }
+
+    .paper-tape { position:absolute; z-index:3; top:-12px; right:9%; width:100px; height:25px; background:var(--tape); transform:rotate(2deg); }
+    .paper-index { margin:0 0 6px; color:var(--main-dark); font:800 9px/1 var(--f-micro); letter-spacing:.18em; }
+
+    .paper-name { display:flex; align-items:flex-end; gap:16px; }
+    .paper-name > div small { display:block; margin:0 0 -3px 5px; color:var(--main-dark); font:800 8px/1 var(--f-micro); letter-spacing:.16em; opacity:.85; }
+    .paper-name h1 { margin:0; color:var(--main-deep); font:400 clamp(60px,4.8vw,92px)/.84 var(--f-hand); letter-spacing:-.025em; transform:rotate(-1deg); }
+    .paper-name > span { margin-bottom:8px; color:var(--main-dark); font:400 clamp(17px,1.35vw,25px)/1 var(--f-note); transform:rotate(1deg); }
+
+    .paper-bio {
+      margin:11px 0 13px; color:var(--text-mid);
+      font-size:clamp(14px,1vw,18px); line-height:1.45; letter-spacing:-.035em; word-break:keep-all;
+    }
+
+    /* 프로필 = 표 아닌 한 줄 기재 */
+    .paper-lines { margin:0 0 12px; padding:2px 3px 0; }
+    .paper-lines .dline { padding:5px 0; }
+    .paper-lines .dline .k { font-size:12px; }
+    .paper-lines .dline .k::before { width:8px; height:8px; background-size:8px 8px; margin-right:6px; }
+    .paper-lines .dline .v { font-size:13px; }
+    .paper-lines .dline .dd { font-size:9.5px; padding:2px 8px; }
+
+    /* 오늘 방송 */
+    .today-card {
+      position:relative; padding:11px 15px 12px;
+      border:1px dashed var(--pline); background:color-mix(in srgb, var(--main-light) 78%, transparent);
+      transform:rotate(.15deg);
+    }
+    .today-head { display:flex; align-items:center; gap:10px; }
+    .today-head span { font:800 8px/1 var(--f-micro); letter-spacing:.12em; color:var(--main-dark); }
+    .today-head b { font:400 clamp(16px,1.05vw,20px)/1 var(--f-note); color:var(--text); }
+    .today-body { margin-top:7px; font-size:13.5px; font-weight:700; color:var(--text); line-height:1.5; word-break:keep-all; }
+    .today-body em { font-style:normal; display:block; margin-top:2px; font:800 10px/1.5 var(--f-micro); letter-spacing:.06em; color:var(--main-dark); }
+    .today-note { margin:6px 0 0; font-size:10.5px; color:var(--text-soft); line-height:1.4; }
+
+    .paper-doodle { position:absolute; z-index:3; color:color-mix(in srgb, var(--main-dark) 62%, transparent); font-family:var(--f-note); pointer-events:none; }
+    .paper-doodle-heart { right:8%; top:9%; font-size:28px; transform:rotate(10deg); }
+    .paper-doodle-flower { right:3%; bottom:17%; font-size:19px; transform:rotate(-12deg); }
+
+    .paper-links { display:flex; gap:9px; margin-top:11px; flex-wrap:wrap; }
+    .paper-links a {
+      flex:1; min-width:110px; display:flex; justify-content:space-between;
+      padding:11px 14px; border:1px solid var(--pline);
+      font:800 11px/1 var(--f-micro); letter-spacing:.08em; color:var(--main-deep);
+      transition:var(--transition);
+    }
+    .paper-links a:hover { color:#fff; background:var(--main-dark); border-color:var(--main-dark); }
+
+    /* 가슴쪽 워드마크 */
+    .flower-message {
+      position:absolute; left:52%; bottom:11%; margin:0; color:#fff;
+      font:400 clamp(52px,4.6vw,88px)/.9 var(--f-note);
+      letter-spacing:.035em; text-shadow:0 3px 18px rgba(39,30,37,.5); transform:rotate(-1deg);
+      pointer-events:none;
+    }
+
+    /* 우측 메뉴 */
+    .flower-side-menu {
+      position:absolute; right:clamp(28px,3vw,58px); top:12%;
+      width:clamp(128px,10vw,190px); padding:20px 0; color:#fff;
+      border-top:1px solid rgba(255,255,255,.45); border-bottom:1px solid rgba(255,255,255,.45);
+      text-shadow:0 2px 9px rgba(40,32,38,.3);
+    }
+    .flower-side-menu > p { margin:0 0 10px; color:rgba(255,255,255,.7); font:800 9px/1 var(--f-micro); letter-spacing:.18em; }
+    .flower-side-menu a {
+      display:flex; align-items:center; width:100%; gap:13px; padding:12px 0;
+      color:rgba(255,255,255,.72); border-bottom:1px solid rgba(255,255,255,.16);
+      font-size:clamp(14px,.95vw,18px); font-weight:700; transition:var(--transition);
+    }
+    .flower-side-menu a span { font:800 9px/1 var(--f-micro); }
+    .flower-side-menu a:hover { color:#fff; padding-left:8px; }
+    .flower-side-menu a:hover::after { content:'♡'; margin-left:auto; }
+
+    .flower-bottom-copy {
+      position:absolute; z-index:4; left:50%; bottom:3.5%;
+      display:flex; align-items:center; gap:17px;
+      color:rgba(255,255,255,.75); font:800 9px/1 var(--f-micro); letter-spacing:.2em;
+      text-shadow:0 2px 9px rgba(40,32,38,.3); pointer-events:none;
+    }
+    .flower-bottom-copy i { color:#f5ced9; font:400 21px/1 Georgia, serif; font-style:normal; }
+
+    @media (max-width:900px){
+      .concept-two { min-height:1080px; overflow-y:auto; }
+      .flower-layout { min-height:940px; height:auto; }
+      .flower-photo { object-position:57% center; }
+      .flower-paper {
+        position:relative; left:auto; top:auto; width:calc(100% - 32px);
+        margin:30px 16px; padding:32px 22px 26px; transform:rotate(-.2deg);
+      }
+      .paper-name { display:block; }
+      .paper-name > span { display:block; margin:2px 0 10px; }
+      .flower-side-menu, .flower-bottom-copy { display:none; }
+      .flower-message { left:20px; bottom:26px; font-size:46px; }
+    }
+  </style>
+</head>
+<body data-page="home">
+<script>if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');</script>
+
+<main class="concept-two">
+  <img class="flower-photo" src="./assets/baerong-blossom.webp" alt="배롱꽃과 함께 있는 배롱">
+  <div class="flower-wash" aria-hidden="true"></div>
+
+  <header class="flower-header">
+    <a class="flower-logo" href="./" aria-label="배롱 FLOWER DIARY 메인">✿</a>
+    <nav class="flower-nav" aria-label="메인 메뉴">
+      <a data-nav="home" href="./">메인</a>
+      <a data-nav="profile" href="./profile/">프로필</a>
+      <a data-nav="schedule" href="./schedule/">일정</a>
+      <a data-nav="notice" href="./notice/">공지</a>
+      <a data-nav="work" href="./work/">업보</a>
+      <a data-nav="dress" href="./dress/">옷장</a>
+    </nav>
+    <div class="flower-tools">
+      <p class="flower-header-note">a page for baerong <span>♡</span></p>
+      <button class="dk-toggle" id="dkToggle" type="button" aria-label="다크 모드 전환"><i id="dkKnob">☾</i></button>
+      <button class="ask" type="button" onclick="openAsk()">✉ 문의</button>
+    </div>
+  </header>
+
+  <div class="flower-layout">
+    <aside class="flower-paper">
+      <span class="paper-tape" aria-hidden="true"></span>
+      <span class="paper-doodle paper-doodle-heart" aria-hidden="true">♡</span>
+      <span class="paper-doodle paper-doodle-flower" aria-hidden="true">✿</span>
+
+      <p class="paper-index">PROFILE NOTE · VOL. 01</p>
+
+      <div class="paper-name">
+        <div>
+          <small>NICKNAME</small>
+          <h1 data-hook="info-name">배롱</h1>
+        </div>
+        <span>Baerong&apos;s soft diary</span>
+      </div>
+
+      <p class="paper-bio" data-hook="bio">당신과 행복한 하루를 만들고 싶은 배롱입니다 🍀</p>
+
+      <div class="paper-lines" aria-label="배롱 기본 정보">
+        <div class="dline"><span class="k">생일</span><span class="lead"></span><span class="v" data-hook="info-birth">08.18</span><span class="dd" id="dd-birth">D-</span></div>
+        <div class="dline"><span class="k">데뷔일</span><span class="lead"></span><span class="v" data-hook="info-debut">2024.09.23</span><span class="dd" id="dd-debut">D-</span></div>
+        <div class="dline"><span class="k">주 컨텐츠</span><span class="lead"></span><span class="v" data-hook="info-content">게임 &amp; 소통 &amp; 풀트</span></div>
+        <div class="dline"><span class="k">MBTI</span><span class="lead"></span><span class="v" data-hook="info-mbti">IST(F)J</span></div>
+        <div class="dline"><span class="k">팬닉</span><span class="lead"></span><span class="v" data-hook="info-fandom">ε:</span></div>
+      </div>
+
+      <section class="today-card" aria-label="오늘의 방송">
+        <div class="today-head">
+          <span>TODAY</span>
+          <b>오늘의 방송</b>
+        </div>
+        <div class="today-body" id="todayBody">불러오는 중…</div>
+        <p class="today-note">이번 주 · 한 달 일정은 <a href="./schedule/" style="color:var(--main-deep);font-weight:800">일정</a>에서 확인해 주세요</p>
+      </section>
+
+      <div class="paper-links" id="mainLinks">
+        <a href="https://www.sooplive.com/station/baerong2" target="_blank" rel="noreferrer">SOOP <span>↗</span></a>
+        <a href="https://fancim.me/celeb/profile.aspx?url=504450" target="_blank" rel="noreferrer">FANCIM <span>↗</span></a>
+      </div>
+    </aside>
+
+    <p class="flower-message">BAERONG</p>
+
+    <aside class="flower-side-menu">
+      <p>MENU</p>
+      <a href="./profile/"><span>01</span>프로필</a>
+      <a href="./schedule/"><span>02</span>일정</a>
+      <a href="./notice/"><span>03</span>공지</a>
+      <a href="./work/"><span>04</span>업보</a>
+      <a href="./dress/"><span>05</span>옷장</a>
+    </aside>
+
+    <div class="flower-bottom-copy" aria-hidden="true">
+      <span>BE SWEET</span><i>♡</i><span>STAY A WHILE</span>
+    </div>
+  </div>
+</main>
+
+<div class="askmask" id="askmask">
+  <div class="askmodal">
+    <h3>쪽지 남기기</h3>
+    <p>배롱에게 하고 싶은 말을 남겨주세요. 익명으로 전달돼요 🍀</p>
+    <textarea id="askmsg" placeholder="여기에 적어주세요..."></textarea>
+    <div class="askbtns">
+      <button class="no" type="button" onclick="closeAsk()">취소</button>
+      <button class="yes" type="button" onclick="sendAsk()">붙이기 ♡</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="./supabase.js"></script>
+<script src="./site.js"></script>
+<script>
+var DEF = {
+  'soop-id': 'baerong2',
+  'info-name': '배롱',
+  'bio': '당신과 행복한 하루를 만들고 싶은 배롱입니다 🍀',
+  'info-birth': '08.18', 'info-debut': '2024.09.23',
+  'info-content': '게임 & 소통 & 풀트', 'info-mbti': 'IST(F)J', 'info-fandom': 'ε:',
+  'days': '0,1,2,3,4,5,6',
+  'sched-note': '매일 8~9시 사이 (랜덤 휴방)',
+  'link-soop': 'https://www.sooplive.com/station/baerong2',
+  'link-discord': 'https://discord.gg/tEsU79stA',
+  'link-fancim': 'https://fancim.me/celeb/profile.aspx?url=504450',
+  'link-youtube': '', 'link-x': ''
+};
+var P = {};
+function val(k){ var v = asText(P[k]).trim(); return v || (DEF[k] || ''); }
+
+function renderHooks(){
+  document.querySelectorAll('[data-hook]').forEach(function(el){
+    var v = val(el.getAttribute('data-hook'));
+    if (v !== '') el.textContent = v;
+  });
+}
+function renderDday(){
+  var b = ddayFromMMDD(val('info-birth'));
+  var eb = document.getElementById('dd-birth');
+  if (eb){ if (b === null){ eb.style.display='none'; } else { eb.style.display=''; eb.textContent = ddLabel(b); } }
+  var a = anniversary(val('info-debut'));
+  var ed = document.getElementById('dd-debut');
+  if (ed){
+    if (!a){ ed.style.display='none'; }
+    else { ed.style.display=''; ed.textContent = (a.days === 0 ? (a.years + '주년 🎉') : ('D-' + a.days)); }
+  }
+}
+function renderLinks(){
+  var defs = [['SOOP','link-soop'],['DISCORD','link-discord'],['FANCIM','link-fancim'],['YOUTUBE','link-youtube'],['X','link-x']];
+  var html = defs.map(function(d){
+    var u = val(d[1]);
+    return u ? '<a href="' + esc(u) + '" target="_blank" rel="noreferrer">' + d[0] + ' <span>↗</span></a>' : '';
+  }).filter(Boolean).slice(0, 3).join('');
+  if (html) document.getElementById('mainLinks').innerHTML = html;
+}
+async function renderToday(){
+  var box = document.getElementById('todayBody');
+  var now = new Date();
+  var key = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+  var rows = [];
+  try { rows = await fetchAll('schedule', { order:'date', asc:true }) || []; } catch(e){ rows = []; }
+  var todays = rows.filter(function(r){ return asText(r.date) === key; });
+
+  if (todays.length){
+    box.innerHTML = todays.map(function(s){
+      var off = asText(s.type) === '휴방';
+      var t = [asText(s.time), asText(s.time2)].filter(Boolean).join(' · ');
+      var title = asText(s.title) || (off ? '오늘은 휴방이에요' : '방송해요');
+      return esc(title) + (t ? '<em>' + esc(t) + '</em>' : '');
+    }).join('<div style="height:6px"></div>');
+    return;
+  }
+  /* 등록된 일정이 없으면 방송 요일 기준 안내 */
+  var days = asText(val('days')).split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+  var idx = (now.getDay() + 6) % 7;              /* 0=월 … 6=일 */
+  var on = days.indexOf(String(idx)) !== -1;
+  box.innerHTML = on
+    ? '방송 예정이에요<em>' + esc(val('sched-note')) + '</em>'
+    : '오늘은 휴방이에요<em>REST DAY</em>';
+}
+
+async function load(){
+  try {
+    const { data } = await db.from('profile').select('data').eq('id',1).single();
+    P = (data && data.data) || {};
+  } catch(e){ P = {}; }
+  try { renderHooks(); renderDday(); renderLinks(); } catch(e){ console.error(e); }
+  try { await renderToday(); } catch(e){ document.getElementById('todayBody').textContent = '일정을 불러오지 못했어요'; }
+  markReady();
+}
+load();
+</script>
+<script src="./fx.js"></script>
+<script src="./fxfb.js"></script>
+</body>
+</html>

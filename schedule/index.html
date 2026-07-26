@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>배롱 · 일정</title>
+  <meta name="description" content="배롱 FLOWER DIARY — 방송 일정">
+  <link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/ba/baerong2/baerong2.jpg">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    /* ── 이번 주 ── */
+    .wk { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+    .wk-d {
+      position:relative; min-height:104px; padding:11px 8px 10px;
+      border:1px solid var(--pline); border-radius:7px 7px 10px 10px;
+      background:color-mix(in srgb, var(--card) 74%, transparent);
+    }
+    .wk-d.today { background:var(--main-light); border-color:var(--main-dark); box-shadow:3px 4px 0 rgba(183,133,151,.14); }
+    .wk-d .dw { font:800 10px/1 var(--f-micro); letter-spacing:.12em; color:var(--main-dark); }
+    .wk-d .dd { margin-top:3px; font-size:17px; font-weight:900; color:var(--text); letter-spacing:-.02em; }
+    .wk-d .tag2 { display:block; margin-top:7px; font-size:11px; font-weight:700; color:var(--text-mid); line-height:1.4; word-break:keep-all; }
+    .wk-d .off { color:var(--text-soft); }
+    .wk-d .tm { display:block; margin-top:3px; font:800 9.5px/1.4 var(--f-micro); color:var(--main-dark); letter-spacing:.04em; }
+    @media(max-width:760px){ .wk{ grid-template-columns:repeat(4,1fr); } }
+    @media(max-width:460px){ .wk{ grid-template-columns:repeat(2,1fr); } }
+
+    /* ── 달력 ── */
+    .cal-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; gap:10px; }
+    .cal-mon { font:400 34px/1 var(--f-hand); color:var(--main-deep); }
+    .cal-mon span { font:800 11px/1 var(--f-micro); letter-spacing:.16em; color:var(--main-dark); margin-left:8px; }
+    .cal-btn {
+      width:34px; height:34px; border-radius:50%; border:1.5px solid var(--pline);
+      background:var(--card); color:var(--main-deep); font-size:15px; cursor:pointer;
+      display:grid; place-items:center; transition:var(--transition);
+    }
+    .cal-btn:hover { border-color:var(--main-dark); }
+    .cal { border:1px solid var(--pline); background:color-mix(in srgb, var(--card) 66%, transparent); }
+    .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); }
+    .cal-dow { padding:9px 2px; text-align:center; font:800 10.5px/1 var(--f-micro); letter-spacing:.1em; color:var(--main-dark); background:var(--main-light); }
+    .cal-dow:first-child { color:#c4566a; } .cal-dow:last-child { color:#5a8fa8; }
+    .cal-cell { min-height:82px; padding:5px 5px 6px; border-top:1px solid var(--pline); border-right:1px solid var(--pline); overflow:hidden; }
+    .cal-cell:nth-child(7n) { border-right:0; }
+    .cal-cell.other { opacity:.32; }
+    .cal-cell.has { cursor:pointer; }
+    .cal-cell.has:hover { background:var(--main-light); }
+    .cal-cell.today { background:var(--main-light); }
+    .cal-cell.today .cal-d { background:var(--main-dark); color:#fff; border-radius:50%; width:21px; height:21px; display:inline-flex; align-items:center; justify-content:center; }
+    .cal-cell.hl { box-shadow:inset 0 0 0 2px var(--main-dark); }
+    .cal-d { font-size:12px; font-weight:800; color:var(--text-mid); padding:1px 3px; }
+    .cal-cell:nth-child(7n+1) .cal-d { color:#c4566a; }
+    .cal-cell:nth-child(7n) .cal-d { color:#5a8fa8; }
+    .ev { font-size:9.5px; padding:2px 5px; border-radius:5px; margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-weight:700; }
+    .c-green{background:#dcefe3;color:#3f7a5c}.c-pink{background:#fbe0ea;color:#b1607f}
+    .c-yellow{background:#fbf0d5;color:#96751e}.c-orange{background:#fbe4d3;color:#a5642c}
+    .c-blue{background:#dde8f5;color:#456c95}.c-purple{background:#e7dff2;color:#6f5399}
+    .c-red{background:#fadcdc;color:#b0505a}.c-gray{background:#e9e6e7;color:#6c6469}
+    body.dark .c-green,body.dark .c-pink,body.dark .c-yellow,body.dark .c-orange,
+    body.dark .c-blue,body.dark .c-purple,body.dark .c-red,body.dark .c-gray { filter:brightness(.78) saturate(.9); }
+    @media(max-width:560px){ .cal-cell{ min-height:60px; padding:3px 2px 4px; } .cal-d{ font-size:10.5px; } .ev{ font-size:8px; padding:1px 3px; } }
+
+    /* ── 다가오는 일정 ── */
+    .up { display:flex; align-items:center; gap:13px; padding:13px 15px; margin-bottom:8px;
+          border:1px solid var(--pline); border-left:5px solid var(--main-dark);
+          background:color-mix(in srgb, var(--card) 74%, transparent); cursor:pointer; transition:var(--transition); }
+    .up:hover { box-shadow:var(--shadow); transform:translateY(-2px); }
+    .up .dt { flex:none; width:86px; font:800 12px/1.5 var(--f-micro); color:var(--main-dark); letter-spacing:.04em; }
+    .up .in { flex:1; min-width:0; }
+    .up .ti { font-size:14.5px; font-weight:700; color:var(--text); }
+    .up .tm { font-size:11.5px; color:var(--text-soft); margin-top:2px; }
+    .up .bd { flex:none; padding:4px 12px; border-radius:999px; font-size:11.5px; font-weight:800; }
+
+    /* ── 상세 모달 ── */
+    .ov { position:fixed; inset:0; background:rgba(50,36,42,.5); display:none; align-items:center; justify-content:center; z-index:800; padding:20px; }
+    .ov.on { display:flex; }
+    .mo { position:relative; background:var(--card); width:min(400px,100%); padding:24px; border:1px solid var(--pline); box-shadow:0 22px 60px rgba(0,0,0,.32); max-height:86vh; overflow:auto; }
+    .mo::after { content:''; position:absolute; inset:9px; border:1px solid var(--pline); pointer-events:none; }
+    .mo > * { position:relative; z-index:2; }
+    .mo .md { font:800 11px/1 var(--f-micro); letter-spacing:.14em; color:var(--main-dark); margin-bottom:10px; }
+    .mo .part { padding:11px 13px; margin-bottom:8px; border:1px dashed var(--pline); background:color-mix(in srgb, var(--main-light) 60%, transparent); }
+    .mo .part .pt { font:800 10.5px/1 var(--f-micro); letter-spacing:.08em; color:var(--main-dark); }
+    .mo .part .pn { font-size:14.5px; font-weight:700; color:var(--text); margin-top:4px; }
+    .mo .desc { font-size:13px; color:var(--text-mid); white-space:pre-wrap; padding:10px 13px; background:color-mix(in srgb, var(--main-light) 45%, transparent); margin-bottom:8px; }
+    .mo .close { width:100%; margin-top:6px; padding:11px; border:0; background:var(--main-light); color:var(--main-deep); font-family:inherit; font-size:14px; font-weight:700; cursor:pointer; }
+  </style>
+</head>
+<body class="sub" data-page="schedule">
+<script>if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');</script>
+
+<header class="flower-header">
+    <a class="flower-logo" href="../" aria-label="배롱 FLOWER DIARY 메인">✿</a>
+    <nav class="flower-nav" aria-label="메인 메뉴">
+      <a data-nav="home" href="../">메인</a>
+      <a data-nav="profile" href="../profile/">프로필</a>
+      <a data-nav="schedule" href="../schedule/">일정</a>
+      <a data-nav="notice" href="../notice/">공지</a>
+      <a data-nav="work" href="../work/">업보</a>
+      <a data-nav="dress" href="../dress/">옷장</a>
+    </nav>
+    <div class="flower-tools">
+      <p class="flower-header-note">a page for baerong <span>♡</span></p>
+      <button class="dk-toggle" id="dkToggle" type="button" aria-label="다크 모드 전환"><i id="dkKnob">☾</i></button>
+      <button class="ask" type="button" onclick="openAsk()">✉ 문의</button>
+    </div>
+  </header>
+
+<main class="dwrap wrap stagger">
+
+  <section class="dsheet">
+    <span class="tape r"></span>
+    <span class="doodle d1">✿</span>
+    <div class="sheet-head">
+      <p class="sheet-index">WEEKLY PLANNER · VOL. 02</p>
+      <div class="sheet-title-row">
+        <h1 class="sheet-title">일정</h1>
+        <span class="sheet-en">baerong's schedule</span>
+      </div>
+      <p class="sheet-desc">이번 주 계획과 한 달 달력이에요. 방송 시간은 <b data-hook="sched-note">매일 8~9시 사이 (랜덤 휴방)</b>이라 당일 공지를 함께 확인해 주세요.</p>
+      <div class="sheet-rule"></div>
+    </div>
+    <h2 class="sec-title">이번 주 <span class="en">THIS WEEK</span></h2>
+    <div class="wk" id="week"><div class="spinner" style="grid-column:1/-1"></div></div>
+  </section>
+
+  <section class="dsheet">
+    <span class="tape l"></span>
+    <div class="cal-top">
+      <button class="cal-btn" type="button" onclick="moveMonth(-1)" aria-label="이전 달">‹</button>
+      <div class="cal-mon" id="calMon"></div>
+      <button class="cal-btn" type="button" onclick="moveMonth(1)" aria-label="다음 달">›</button>
+    </div>
+    <div class="cal"><div class="cal-grid" id="calGrid"></div></div>
+  </section>
+
+  <section class="dsheet">
+    <h2 class="sec-title">다가오는 일정 <span class="en">UPCOMING</span></h2>
+    <div id="upcoming"><div class="spinner"></div></div>
+  </section>
+
+</main>
+
+<div class="ov" id="ov" onclick="if(event.target===this)closeMo()">
+  <div class="mo" id="moBody"></div>
+</div>
+
+<div class="ghost-mark" aria-hidden="true">baerong ♡</div>
+<footer>
+  <span class="fnote">be sweet, stay a while ♡</span>
+  © 2026 배롱 (BAERONG) Official.<br>
+  비즈니스 문의 — baerong2486@gmail.com
+</footer>
+<div class="askmask" id="askmask">
+  <div class="askmodal">
+    <h3>쪽지 남기기</h3>
+    <p>배롱에게 하고 싶은 말을 남겨주세요. 익명으로 전달돼요 🍀</p>
+    <textarea id="askmsg" placeholder="여기에 적어주세요..."></textarea>
+    <div class="askbtns">
+      <button class="no" type="button" onclick="closeAsk()">취소</button>
+      <button class="yes" type="button" onclick="sendAsk()">붙이기 ♡</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../supabase.js"></script>
+<script src="../site.js"></script>
+<script>
+var DOW = ['일','월','화','수','목','금','토'];
+var DOW_EN = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+var rows = [], curY, curM, streamDays = [];
+
+function isOff(s){ return asText(s.type) === '휴방'; }
+function cls(s){ return 'c-' + (asText(s.color) || (isOff(s) ? 'pink' : 'green')); }
+function ymd(d){
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+/* ── 이번 주 (월요일 시작) ── */
+function renderWeek(){
+  var box = document.getElementById('week');
+  var now = new Date(); now.setHours(0,0,0,0);
+  var mondayOffset = (now.getDay() + 6) % 7;
+  var mon = new Date(now); mon.setDate(now.getDate() - mondayOffset);
+  var html = '';
+  for (var i = 0; i < 7; i++) {
+    var d = new Date(mon); d.setDate(mon.getDate() + i);
+    var key = ymd(d);
+    var evs = rows.filter(function(r){ return asText(r.date) === key; });
+    var isToday = key === ymd(now);
+    var body;
+    if (evs.length) {
+      body = evs.map(function(e){
+        var t = asText(e.time);
+        return '<span class="tag2' + (isOff(e) ? ' off' : '') + '">' + esc(asText(e.title) || (isOff(e) ? '휴방' : '방송')) + '</span>' +
+               (t ? '<span class="tm">' + esc(t) + '</span>' : '');
+      }).join('');
+    } else {
+      var on = streamDays.indexOf(String(i)) !== -1;   /* 0=월 … 6=일 */
+      body = '<span class="tag2' + (on ? '' : ' off') + '">' + (on ? '방송 예정' : '휴방') + '</span>';
+    }
+    var cell = '<div class="wk-d' + (isToday ? ' today' : '') + (evs.length ? ' has' : '') + '"';
+    if (evs.length) cell += ' onclick="openMo(\'' + key + '\')"';
+    cell += '><div class="dw">' + DOW_EN[d.getDay()] + '</div>' +
+            '<div class="dd">' + d.getDate() + '</div>' + body + '</div>';
+    html += cell;
+  }
+  box.innerHTML = html;
+}
+
+/* ── 월 달력 ── */
+function renderCal(){
+  document.getElementById('calMon').innerHTML = (curM+1) + '월 <span>' + curY + '</span>';
+  var grid = document.getElementById('calGrid');
+  var first = new Date(curY, curM, 1);
+  var last  = new Date(curY, curM+1, 0);
+  var start = first.getDay();
+  var today = new Date(); today.setHours(0,0,0,0);
+  var html = DOW.map(function(d){ return '<div class="cal-dow">' + d + '</div>'; }).join('');
+  var prevLast = new Date(curY, curM, 0).getDate();
+  for (var i = start-1; i >= 0; i--) html += '<div class="cal-cell other"><span class="cal-d">' + (prevLast-i) + '</span></div>';
+  for (var d = 1; d <= last.getDate(); d++) {
+    var key = curY + '-' + String(curM+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+    var evs = rows.filter(function(r){ return asText(r.date) === key; });
+    var isToday = (today.getFullYear()===curY && today.getMonth()===curM && today.getDate()===d);
+    var hl = evs.some(function(e){ return !!e.highlight; });
+    var evHtml = evs.map(function(e){
+      var label = (asText(e.time) ? asText(e.time) + ' ' : '') + (asText(e.title) || (isOff(e) ? '휴방' : '방송'));
+      return '<div class="ev ' + cls(e) + '" title="' + esc(label) + '">' + esc(label) + '</div>';
+    }).join('');
+    html += '<div class="cal-cell' + (isToday?' today':'') + (evs.length?' has':'') + (hl?' hl':'') + '"' +
+            (evs.length ? ' onclick="openMo(\'' + key + '\')"' : '') + '>' +
+            '<span class="cal-d">' + d + '</span>' + evHtml + '</div>';
+  }
+  var total = start + last.getDate();
+  var rem = total % 7 === 0 ? 0 : 7 - (total % 7);
+  for (var j = 1; j <= rem; j++) html += '<div class="cal-cell other"><span class="cal-d">' + j + '</span></div>';
+  grid.innerHTML = html;
+}
+function moveMonth(n){
+  curM += n;
+  if (curM > 11) { curM = 0; curY++; }
+  if (curM < 0)  { curM = 11; curY--; }
+  renderCal();
+  try { initIframeResize(); } catch(e){}
+}
+
+/* ── 다가오는 일정 ── */
+function renderUpcoming(){
+  var el = document.getElementById('upcoming');
+  var today = ymd(new Date());
+  var up = rows.filter(function(r){ return asText(r.date) >= today; }).slice(0, 12);
+  if (!up.length){ el.innerHTML = '<div class="empty"><div class="empty-icon">✿</div>아직 적어둔 일정이 없어요</div>'; return; }
+  el.innerHTML = up.map(function(s){
+    var d = new Date(asText(s.date) + 'T00:00:00');
+    var label = isOff(s) ? '휴방' : '방송';
+    var times = [asText(s.time), asText(s.time2)].filter(Boolean).join(' · ');
+    return '<div class="up" onclick="openMo(\'' + esc(asText(s.date)) + '\')">' +
+      '<div class="dt">' + String(d.getMonth()+1).padStart(2,'0') + '.' + String(d.getDate()).padStart(2,'0') + ' (' + DOW[d.getDay()] + ')</div>' +
+      '<div class="in"><div class="ti">' + esc(asText(s.title) || label) + '</div>' +
+      (times ? '<div class="tm">' + esc(times) + '</div>' : '') + '</div>' +
+      '<span class="bd ' + cls(s) + '">' + label + '</span></div>';
+  }).join('');
+}
+
+/* ── 상세 ── */
+function openMo(key){
+  var evs = rows.filter(function(r){ return asText(r.date) === key; });
+  if (!evs.length) return;
+  var d = new Date(key + 'T00:00:00');
+  var html = '<div class="md">' + key + ' (' + DOW[d.getDay()] + ')</div>';
+  evs.forEach(function(s){
+    var off = isOff(s);
+    html += '<div class="part"><div class="pt">' + esc(asText(s.time) || (off ? 'OFF' : '1부')) + '</div>' +
+            '<div class="pn">' + esc(asText(s.title) || (off ? '휴방' : '방송')) + '</div></div>';
+    if (asText(s.title2) || asText(s.time2)) {
+      html += '<div class="part"><div class="pt">' + esc(asText(s.time2) || '2부') + '</div>' +
+              '<div class="pn">' + esc(asText(s.title2) || '방송') + '</div></div>';
+    }
+    if (asText(s.description)) html += '<div class="desc">' + esc(asText(s.description)) + '</div>';
+  });
+  html += '<button class="close" type="button" onclick="closeMo()">닫기</button>';
+  document.getElementById('moBody').innerHTML = html;
+  document.getElementById('ov').classList.add('on');
+}
+function closeMo(){ document.getElementById('ov').classList.remove('on'); }
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeMo(); });
+
+/* ── 로드 ── */
+async function load(){
+  var now = new Date(); curY = now.getFullYear(); curM = now.getMonth();
+  try { rows = await fetchAll('schedule', { order:'date', asc:true }) || []; } catch(e){ rows = []; }
+  try {
+    const { data } = await db.from('profile').select('data').eq('id',1).single();
+    var P = (data && data.data) || {};
+    streamDays = asText(P['days'] || '0,1,2,3,4,5,6').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+    var note = asText(P['sched-note']).trim();
+    if (note) document.querySelectorAll('[data-hook="sched-note"]').forEach(function(el){ el.textContent = note; });
+  } catch(e){ streamDays = ['0','1','2','3','4','5','6']; }
+
+  renderWeek(); renderCal(); renderUpcoming();
+  markReady();
+  try { initIframeResize(); } catch(e){}
+}
+load();
+</script>
+<script src="../fx.js"></script>
+<script src="../fxfb.js"></script>
+</body>
+</html>
