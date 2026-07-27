@@ -32,7 +32,7 @@ var DEF = {
   'dislike-list': '',
   'tmi': '좋아하는 음식:-\n요즘 듣는 노래:-\n최근 본 것:-',
   'milestones': '달성|첫 방송\n진행 중|매일 잔잔하게 방송하기',
-  'msg': '안녕하세요, 배롱이에요!\n잔잔하게 게임하고 수다 떠는 방송을 하고 있어요.\n편하게 들러서 하루 이야기 들려주세요 🍀',
+  'msg': '🎮 시청자 참여 게임 — 마인크래프트 · 롤토체스\n🎲 룰렛 돌리기\n💬 고민 상담 / 수다 타임\n\n참여 방법은 공지를 확인해 주세요 🍀',
   'days': '0,1,2,3,4,5,6',
   'sched-note': '매일 8~9시 사이 (랜덤 휴방)',
 
@@ -57,24 +57,19 @@ var DEF = {
   'ask-desc': '배롱에게 하고 싶은 말을 남겨주세요. 익명으로 전달돼요 🍀',
 
   /* 페이지 머리말 */
-  'hd-profile-idx': 'PROFILE NOTE · VOL. 01',
-  'hd-schedule-idx': 'WEEKLY PLANNER · VOL. 02',
   'hd-schedule-title': '일정', 'hd-schedule-en': "baerong's schedule",
   'hd-schedule-desc': '이번 주 계획과 한 달 달력이에요. 방송 시간은 랜덤이라 당일 공지를 함께 확인해 주세요.',
-  'hd-notice-idx': 'NOTICE BOARD · VOL. 03',
   'hd-notice-title': '공지', 'hd-notice-en': 'pinned notes',
   'hd-notice-desc': '채팅 규칙 · 시참 규칙 · 시그 이미지 · 구독 티콘 · 룰렛 확률 · 방셀 공지를 여기 붙여둬요. 제목을 누르면 내용이 펼쳐져요.',
-  'hd-work-idx': 'KARMA LEDGER · VOL. 04',
   'hd-work-title': '업보', 'hd-work-en': 'who did what ♡',
   'hd-work-desc': '시청자분들이 쌓아 올린 업보를 한 장에 정리했어요. 카드를 누르면 항목별 기록이 펼쳐져요.',
-  'hd-dress-idx': 'OUTFIT ALBUM · VOL. 05',
   'hd-dress-title': '옷장', 'hd-dress-en': "baerong's closet",
   'hd-dress-desc': '새로 갈아입은 옷은 포스터로, 이미 입던 옷은 기존 옷에서 볼 수 있어요. 사진을 누르면 크게 볼 수 있어요.',
 
   /* 섹션 이름 */
   'sec-profile': '프로필', 'sec-stats': '능력치', 'sec-likes': '좋아 · 싫어',
-  'sec-tmi': 'TMI', 'sec-week': '방송 요일', 'sec-goal': '목표',
-  'sec-about': '하고픈 말', 'sec-vod': '다시보기', 'sec-links': '관련 링크',
+  'sec-tmi': 'TMI', 'sec-goal': '목표',
+  'sec-about': '참여 컨텐츠', 'sec-vod': '다시보기', 'sec-links': '관련 링크',
   'lbl-like': '🍀 좋아하는 것', 'lbl-dislike': '🥀 싫어하는 것',
   'lbl-today': '오늘의 방송',
   'sec-thisweek': '이번 주', 'sec-upcoming': '다가오는 일정',

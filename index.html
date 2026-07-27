@@ -69,13 +69,35 @@
       font-size:clamp(14px,1vw,18px); line-height:1.45; letter-spacing:-.035em; word-break:keep-all;
     }
 
-    /* 프로필 = 표 아닌 한 줄 기재 */
-    .paper-lines { margin:0 0 12px; padding:2px 3px 0; }
-    .paper-lines .dline { padding:5px 0; }
-    .paper-lines .dline .k { font-size:12px; }
-    .paper-lines .dline .k::before { width:8px; height:8px; background-size:8px 8px; margin-right:6px; }
-    .paper-lines .dline .v { font-size:13px; }
-    .paper-lines .dline .dd { font-size:9.5px; padding:2px 8px; }
+    /* 프로필 = 포스트잇 카드 (전 시안 복귀) */
+    .profile-notes {
+      display:grid; grid-template-columns:repeat(3,1fr);
+      gap:clamp(7px,.62vw,11px); margin:0 0 13px;
+    }
+    .pnote {
+      position:relative; display:grid; gap:1px;
+      padding:11px 12px 12px;
+      border:1px solid var(--pline); border-radius:6px 6px 9px 9px;
+      background:color-mix(in srgb, var(--card) 84%, var(--main-light));
+      box-shadow:2px 3px 0 rgba(183,133,151,.10);
+    }
+    .pnote:nth-child(2n) { transform:rotate(.5deg); }
+    .pnote:nth-child(3n) { transform:rotate(-.6deg); }
+    .pnote::before {
+      content:''; position:absolute; left:9px; right:9px; top:-4px; height:9px;
+      background:radial-gradient(circle, #8c7780 0 1.3px, transparent 1.6px) 0 0/12px 9px repeat-x;
+      opacity:.5;
+    }
+    .pn-k { font-size:11px; font-weight:700; color:var(--main-dark); letter-spacing:-.02em; }
+    .pn-v { font-size:clamp(13px,1.02vw,16px); font-weight:800; color:var(--text); letter-spacing:-.03em; word-break:keep-all; }
+    .pn-en { font:800 7.5px/1 var(--f-micro); letter-spacing:.13em; color:var(--text-soft); margin-top:3px; }
+    .pn-dd {
+      position:absolute; top:7px; right:8px;
+      padding:2px 7px; border-radius:999px;
+      background:var(--main-dark); color:#fff;
+      font:800 8.5px/1.5 var(--f-micro); letter-spacing:.03em; white-space:nowrap;
+    }
+    @media(max-width:1200px){ .profile-notes{ grid-template-columns:repeat(2,1fr); } }
 
     /* 오늘 방송 */
     .today-card {
@@ -137,17 +159,29 @@
     .flower-bottom-copy i { color:#f5ced9; font:400 21px/1 Georgia, serif; font-style:normal; }
 
     @media (max-width:900px){
-      .concept-two { min-height:1080px; overflow-y:auto; }
-      .flower-layout { min-height:940px; height:auto; }
-      .flower-photo { object-position:57% center; }
+      /* 사진이 위에 크게 보이고, 그 아래로 종이가 겹쳐 올라오는 구성 */
+      .concept-two { min-height:auto; overflow:visible; }
+      .flower-photo { height:56vh; object-position:center 20%; transform:none; }
+      .flower-wash { height:56vh; }
+      .flower-layout { height:auto; min-height:0; padding:40vh 0 28px; }
       .flower-paper {
-        position:relative; left:auto; top:auto; width:calc(100% - 32px);
-        margin:30px 16px; padding:32px 22px 26px; transform:rotate(-.2deg);
+        position:relative; left:auto; top:auto; width:auto;
+        margin:0 14px; padding:26px 20px 22px; transform:rotate(-.3deg);
       }
       .paper-name { display:block; }
       .paper-name > span { display:block; margin:2px 0 10px; }
-      .flower-side-menu, .flower-bottom-copy { display:none; }
-      .flower-message { left:20px; bottom:26px; font-size:46px; }
+      .profile-notes { grid-template-columns:repeat(2,1fr); }
+      .flower-bottom-copy { display:none; }
+      .flower-message {
+        left:18px; right:auto; bottom:auto; top:31vh;
+        font-size:clamp(38px,12vw,58px);
+      }
+    }
+    @media (max-width:420px){
+      .flower-photo, .flower-wash { height:48vh; }
+      .flower-layout { padding-top:34vh; }
+      .flower-message { top:26vh; }
+      .profile-notes { grid-template-columns:1fr 1fr; }
     }
   </style>
 </head>
@@ -180,8 +214,6 @@
       <span class="paper-doodle paper-doodle-heart" aria-hidden="true">♡</span>
       <span class="paper-doodle paper-doodle-flower" aria-hidden="true">✿</span>
 
-      <p class="paper-index" data-site="hd-profile-idx">PROFILE NOTE · VOL. 01</p>
-
       <div class="paper-name">
         <div>
           <small>NICKNAME</small>
@@ -192,12 +224,34 @@
 
       <p class="paper-bio" data-hook="bio">당신과 행복한 하루를 만들고 싶은 배롱입니다 🍀</p>
 
-      <div class="paper-lines" aria-label="배롱 기본 정보">
-        <div class="dline"><span class="k">생일</span><span class="lead"></span><span class="v" data-hook="info-birth">08.18</span><span class="dd" id="dd-birth">D-</span></div>
-        <div class="dline"><span class="k">데뷔일</span><span class="lead"></span><span class="v" data-hook="info-debut">2024.09.23</span><span class="dd" id="dd-debut">D-</span></div>
-        <div class="dline"><span class="k">주 컨텐츠</span><span class="lead"></span><span class="v" data-hook="info-content">게임 &amp; 소통 &amp; 풀트</span></div>
-        <div class="dline"><span class="k">MBTI</span><span class="lead"></span><span class="v" data-hook="info-mbti">IST(F)J</span></div>
-        <div class="dline"><span class="k">팬닉</span><span class="lead"></span><span class="v" data-hook="info-fandom">ε:</span></div>
+      <div class="profile-notes" aria-label="배롱 기본 정보">
+        <div class="pnote">
+          <span class="pn-k">생일</span>
+          <span class="pn-v" data-hook="info-birth">08.18</span>
+          <span class="pn-en">BIRTHDAY</span>
+          <span class="pn-dd" id="dd-birth">D-</span>
+        </div>
+        <div class="pnote">
+          <span class="pn-k">데뷔일</span>
+          <span class="pn-v" data-hook="info-debut">2024.09.23</span>
+          <span class="pn-en">ANNIVERSARY</span>
+          <span class="pn-dd" id="dd-debut">D-</span>
+        </div>
+        <div class="pnote">
+          <span class="pn-k">주 컨텐츠</span>
+          <span class="pn-v" data-hook="info-content">게임 &amp; 소통</span>
+          <span class="pn-en">GAME &amp; TALK</span>
+        </div>
+        <div class="pnote">
+          <span class="pn-k">MBTI</span>
+          <span class="pn-v" data-hook="info-mbti">IST(F)J</span>
+          <span class="pn-en">TYPE</span>
+        </div>
+        <div class="pnote">
+          <span class="pn-k">팬닉</span>
+          <span class="pn-v" data-hook="info-fandom">ε:</span>
+          <span class="pn-en">FANDOM</span>
+        </div>
       </div>
 
       <section class="today-card" aria-label="오늘의 방송">
@@ -216,15 +270,6 @@
     </aside>
 
     <p class="flower-message" data-hook="info-en">BAERONG</p>
-
-    <aside class="flower-side-menu">
-      <p>MENU</p>
-      <a href="./profile/"><span>01</span>프로필</a>
-      <a href="./schedule/"><span>02</span>일정</a>
-      <a href="./notice/"><span>03</span>공지</a>
-      <a href="./work/"><span>04</span>업보</a>
-      <a href="./dress/"><span>05</span>옷장</a>
-    </aside>
 
     <div class="flower-bottom-copy" aria-hidden="true">
       <span id="copy1">BE SWEET</span><i>♡</i><span id="copy2">STAY A WHILE</span>

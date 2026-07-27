@@ -223,16 +223,16 @@
   <div class="tab-panel" id="tab-profile">
 
     <div class="card">
-      <div class="card-title">⭐ 한마디 &amp; 하고픈 말</div>
+      <div class="card-title">⭐ 한마디 &amp; 참여 컨텐츠</div>
       <div class="form-field">
         <label class="input-label">오늘의 한마디</label>
         <textarea class="input" id="f-quote" rows="2" placeholder="오늘도 와줘서 고마워요!"></textarea>
         <div class="hint">프로필 표지의 손글씨 문구예요. 줄바꿈=엔터.</div>
       </div>
       <div class="form-field">
-        <label class="input-label">하고픈 말 (ABOUT)</label>
+        <label class="input-label">참여 컨텐츠 본문</label>
         <textarea class="input" id="f-msg" rows="4" placeholder="안녕하세요, 배롱이에요!"></textarea>
-        <div class="hint">프로필 “하고픈 말” 칸에 표시돼요. 줄바꿈=엔터.</div>
+        <div class="hint">프로필 “참여 컨텐츠” 칸에 표시돼요. 줄바꿈=엔터. 이모지도 그대로 들어가요.</div>
       </div>
       <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveLocalProfile()">저장 ♡</button></div>
     </div>
@@ -543,32 +543,25 @@
       <div class="card-title">📄 페이지 머리말</div>
       <div class="hint" style="margin-bottom:12px">각 페이지 맨 위에 뜨는 <b>작은 영문 라벨 · 큰 제목 · 손글씨 부제 · 설명문</b>이에요.</div>
 
-      <div class="form-field"><label class="input-label">프로필 — 작은 라벨</label><input class="input" id="f-hd-profile-idx" type="text" placeholder="PROFILE NOTE · VOL. 01"></div>
-      <div class="hint" style="margin:-6px 0 16px">프로필은 이름이 제목 역할이라 라벨만 있어요. (메인 종이 위에도 같이 떠요)</div>
-
       <div class="form-grid" style="border-top:1px dashed var(--main-light);padding-top:14px">
-        <div class="form-field"><label class="input-label">일정 — 작은 라벨</label><input class="input" id="f-hd-schedule-idx" type="text" placeholder="WEEKLY PLANNER · VOL. 02"></div>
         <div class="form-field"><label class="input-label">일정 — 제목</label><input class="input" id="f-hd-schedule-title" type="text" placeholder="일정"></div>
         <div class="form-field"><label class="input-label">일정 — 손글씨 부제</label><input class="input" id="f-hd-schedule-en" type="text" placeholder="baerong's schedule"></div>
         <div class="form-field full"><label class="input-label">일정 — 설명문</label><textarea class="input" id="f-hd-schedule-desc" rows="2"></textarea></div>
       </div>
 
       <div class="form-grid" style="border-top:1px dashed var(--main-light);padding-top:14px;margin-top:8px">
-        <div class="form-field"><label class="input-label">공지 — 작은 라벨</label><input class="input" id="f-hd-notice-idx" type="text" placeholder="NOTICE BOARD · VOL. 03"></div>
         <div class="form-field"><label class="input-label">공지 — 제목</label><input class="input" id="f-hd-notice-title" type="text" placeholder="공지"></div>
         <div class="form-field"><label class="input-label">공지 — 손글씨 부제</label><input class="input" id="f-hd-notice-en" type="text" placeholder="pinned notes"></div>
         <div class="form-field full"><label class="input-label">공지 — 설명문</label><textarea class="input" id="f-hd-notice-desc" rows="2"></textarea></div>
       </div>
 
       <div class="form-grid" style="border-top:1px dashed var(--main-light);padding-top:14px;margin-top:8px">
-        <div class="form-field"><label class="input-label">업보 — 작은 라벨</label><input class="input" id="f-hd-work-idx" type="text" placeholder="KARMA LEDGER · VOL. 04"></div>
         <div class="form-field"><label class="input-label">업보 — 제목</label><input class="input" id="f-hd-work-title" type="text" placeholder="업보"></div>
         <div class="form-field"><label class="input-label">업보 — 손글씨 부제</label><input class="input" id="f-hd-work-en" type="text" placeholder="who did what ♡"></div>
         <div class="form-field full"><label class="input-label">업보 — 설명문</label><textarea class="input" id="f-hd-work-desc" rows="2"></textarea></div>
       </div>
 
       <div class="form-grid" style="border-top:1px dashed var(--main-light);padding-top:14px;margin-top:8px">
-        <div class="form-field"><label class="input-label">옷장 — 작은 라벨</label><input class="input" id="f-hd-dress-idx" type="text" placeholder="OUTFIT ALBUM · VOL. 05"></div>
         <div class="form-field"><label class="input-label">옷장 — 제목</label><input class="input" id="f-hd-dress-title" type="text" placeholder="옷장"></div>
         <div class="form-field"><label class="input-label">옷장 — 손글씨 부제</label><input class="input" id="f-hd-dress-en" type="text" placeholder="baerong's closet"></div>
         <div class="form-field full"><label class="input-label">옷장 — 설명문</label><textarea class="input" id="f-hd-dress-desc" rows="2"></textarea></div>
@@ -584,9 +577,8 @@
         <div class="form-field"><label class="input-label">능력치</label><input class="input" id="f-sec-stats" type="text" placeholder="능력치"></div>
         <div class="form-field"><label class="input-label">좋아·싫어</label><input class="input" id="f-sec-likes" type="text" placeholder="좋아 · 싫어"></div>
         <div class="form-field"><label class="input-label">TMI</label><input class="input" id="f-sec-tmi" type="text" placeholder="TMI"></div>
-        <div class="form-field"><label class="input-label">방송 요일</label><input class="input" id="f-sec-week" type="text" placeholder="방송 요일"></div>
         <div class="form-field"><label class="input-label">목표</label><input class="input" id="f-sec-goal" type="text" placeholder="목표"></div>
-        <div class="form-field"><label class="input-label">하고픈 말</label><input class="input" id="f-sec-about" type="text" placeholder="하고픈 말"></div>
+        <div class="form-field"><label class="input-label">참여 컨텐츠 (하고픈 말)</label><input class="input" id="f-sec-about" type="text" placeholder="참여 컨텐츠"></div>
         <div class="form-field"><label class="input-label">다시보기</label><input class="input" id="f-sec-vod" type="text" placeholder="다시보기"></div>
         <div class="form-field"><label class="input-label">관련 링크</label><input class="input" id="f-sec-links" type="text" placeholder="관련 링크"></div>
         <div class="form-field"><label class="input-label">좋아하는 것 (소제목)</label><input class="input" id="f-lbl-like" type="text" placeholder="🍀 좋아하는 것"></div>
@@ -653,14 +645,13 @@ const profileKeys = [
   'link-fancim', 'link-youtube', 'link-x', 'site-bg', 'site-bg-pos',
   'site-bg-wash', 'logo-text', 'main-sub', 'main-copy', 'ghost-text',
   'footer-note', 'footer-copy', 'footer-email', 'ask-title', 'ask-desc',
-  'hd-profile-idx', 'hd-schedule-idx', 'hd-schedule-title', 'hd-schedule-en', 'hd-schedule-desc',
-  'hd-notice-idx', 'hd-notice-title', 'hd-notice-en', 'hd-notice-desc', 'hd-work-idx',
-  'hd-work-title', 'hd-work-en', 'hd-work-desc', 'hd-dress-idx', 'hd-dress-title',
+  'hd-schedule-title', 'hd-schedule-en', 'hd-schedule-desc', 'hd-notice-title', 'hd-notice-en',
+  'hd-notice-desc', 'hd-work-title', 'hd-work-en', 'hd-work-desc', 'hd-dress-title',
   'hd-dress-en', 'hd-dress-desc', 'sec-profile', 'sec-stats', 'sec-likes',
-  'sec-tmi', 'sec-week', 'sec-goal', 'sec-about', 'sec-vod',
-  'sec-links', 'lbl-like', 'lbl-dislike', 'lbl-today', 'sec-thisweek',
-  'sec-upcoming', 'lbl-new', 'lbl-old', 'theme-main', 'theme-main-dark',
-  'theme-main-deep', 'theme-main-light', 'theme-bg', 'theme-logo'
+  'sec-tmi', 'sec-goal', 'sec-about', 'sec-vod', 'sec-links',
+  'lbl-like', 'lbl-dislike', 'lbl-today', 'sec-thisweek', 'sec-upcoming',
+  'lbl-new', 'lbl-old', 'theme-main', 'theme-main-dark', 'theme-main-deep',
+  'theme-main-light', 'theme-bg', 'theme-logo'
 ];
 
 function tryLogin(){

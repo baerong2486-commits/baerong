@@ -73,18 +73,6 @@
     .chip-no { border-style:solid; border-color:var(--line); color:var(--text-mid); }
     .chip-no::before { filter:grayscale(1) opacity(.55); }
 
-    /* ── 방송 요일 ── */
-    .week { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; }
-    .wd {
-      display:grid; place-items:center; gap:3px; padding:11px 2px;
-      border:1px solid var(--pline); border-radius:9px;
-      background:color-mix(in srgb, var(--card) 66%, transparent);
-    }
-    .wd small { font-size:11px; font-weight:800; color:var(--main-dark); }
-    .wd b { font-size:11.5px; font-weight:700; color:var(--text-soft); }
-    .wd.on { background:var(--main-light); border-color:var(--main-dark); }
-    .wd.on b { color:var(--main-deep); }
-    @media(max-width:560px){ .week{ gap:4px; } .wd{ padding:9px 1px; } .wd small{ font-size:10px; } .wd b{ font-size:10px; } }
 
     /* ── 마일스톤 ── */
     .ms { display:flex; align-items:flex-start; gap:10px; padding:9px 2px; border-bottom:1px dotted var(--pline); }
@@ -145,7 +133,6 @@
     <span class="tape r"></span>
     <span class="doodle d1">♡</span>
     <span class="doodle d2">✿</span>
-    <p class="sheet-index" data-site="hd-profile-idx">PROFILE NOTE · VOL. 01</p>
     <div class="p-hero">
       <div class="p-av-wrap" id="avatarWrap">
         <span class="p-av-tape"></span>
@@ -209,24 +196,8 @@
     <section class="dsheet">
       <h2 class="sec-title"><span data-site="sec-tmi">TMI</span> <span class="en">SMALL TALK</span></h2>
       <div id="p-tmi"></div>
-      <div class="dline"><span class="k">방송 시간</span><span class="lead"></span><span class="v" data-site="sched-note">매일 8~9시 사이 (랜덤 휴방)</span></div>
     </section>
   </div>
-
-  <!-- ⑤ 방송 요일 -->
-  <section class="dsheet">
-    <h2 class="sec-title"><span data-site="sec-week">방송 요일</span> <span class="en">WEEKLY</span></h2>
-    <div class="week" id="p-week">
-      <div class="wd" id="day-0"><small>월</small><b>—</b></div>
-      <div class="wd" id="day-1"><small>화</small><b>—</b></div>
-      <div class="wd" id="day-2"><small>수</small><b>—</b></div>
-      <div class="wd" id="day-3"><small>목</small><b>—</b></div>
-      <div class="wd" id="day-4"><small>금</small><b>—</b></div>
-      <div class="wd" id="day-5"><small>토</small><b>—</b></div>
-      <div class="wd" id="day-6"><small>일</small><b>—</b></div>
-    </div>
-    <p style="margin:11px 0 0;font-size:12px;color:var(--text-soft)">※ 자세한 날짜별 일정은 <a href="../schedule/" style="color:var(--main-deep);font-weight:700;text-decoration:underline">일정</a> 페이지에서 확인해 주세요.</p>
-  </section>
 
   <!-- ⑥ 목표 · 하고픈 말 -->
   <div class="grid2">
@@ -236,7 +207,7 @@
     </section>
     <section class="dsheet">
       <span class="doodle d2">♡</span>
-      <h2 class="sec-title"><span data-site="sec-about">하고픈 말</span> <span class="en">ABOUT</span></h2>
+      <h2 class="sec-title"><span data-site="sec-about">참여 컨텐츠</span> <span class="en">JOIN</span></h2>
       <p class="about" data-hook="msg">안녕하세요, 배롱이에요!
 잔잔하게 게임하고 수다 떠는 방송을 하고 있어요.
 편하게 들러서 하루 이야기 들려주세요 🍀</p>
@@ -355,17 +326,6 @@ function renderLikes(){
     ? dis.map(function(t){ return '<span class="tag chip-no">' + esc(t) + '</span>'; }).join('')
     : '<span style="font-size:12.5px;color:var(--text-soft)">딱히 없어요 🍀</span>';
 }
-function renderWeek(){
-  var days = pv('days').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
-  for (var i = 0; i < 7; i++) {
-    var el = document.getElementById('day-' + i);   /* 0=월 … 6=일 (admin 체크값과 동일) */
-    if (!el) continue;
-    var on = days.indexOf(String(i)) !== -1;
-    el.classList.toggle('on', on);
-    var b = el.querySelector('b');
-    if (b) b.textContent = on ? '방송' : '휴방';
-  }
-}
 function renderMilestones(){
   var box = document.getElementById('p-milestones');
   var lines = asLines(pv('milestones'));
@@ -415,7 +375,7 @@ async function load(){
   try {
     applySite();
     renderHooks(); renderAvatar(); renderDday(); renderExtra(); renderTmi(); renderTags();
-    renderStats(); renderLikes(); renderWeek(); renderMilestones(); renderLinks();
+    renderStats(); renderLikes(); renderMilestones(); renderLinks();
   } catch (e) { console.error(e); }
   try { await renderVod(); } catch (e) {}
   markReady();
