@@ -15,7 +15,6 @@
    색은 페이지의 --main 변수를 그대로 써서 다크모드까지 자동 적용됩니다.
    ============================================================ */
 
-/* ─────────── 설정 (이 사람에 맞게 바꾸세요) ─────────── */
 var FX_FLOAT = ['✿','♡','✧','♡','✿','♡'];   // 떠다니는 입자 모양 (배롱나무 꽃 + 하트)
 var FX_CLICK = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNCIgaGVpZ2h0PSIxNCIgdmlld0JveD0iMCAwIDE0IDE0IiBzaGFwZS1yZW5kZXJpbmc9ImNyaXNwRWRnZXMiPjxnIGZpbGw9IiNFRkMwRDAiPjxyZWN0IHg9IjIiIHk9IjAiIHdpZHRoPSI0IiBoZWlnaHQ9IjIiLz48cmVjdCB4PSI4IiB5PSIwIiB3aWR0aD0iNCIgaGVpZ2h0PSIyIi8+PHJlY3QgeD0iMCIgeT0iMiIgd2lkdGg9IjE0IiBoZWlnaHQ9IjIiLz48cmVjdCB4PSIwIiB5PSI0IiB3aWR0aD0iMTQiIGhlaWdodD0iMiIvPjxyZWN0IHg9IjAiIHk9IjYiIHdpZHRoPSIxNCIgaGVpZ2h0PSIyIi8+PHJlY3QgeD0iMiIgeT0iOCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjIiLz48cmVjdCB4PSI0IiB5PSIxMCIgd2lkdGg9IjYiIGhlaWdodD0iMiIvPjxyZWN0IHg9IjYiIHk9IjEyIiB3aWR0aD0iMiIgaGVpZ2h0PSIyIi8+PC9nPjwvc3ZnPg==';   // 클릭/프사톡 = 픽셀(도트) 하트
 var FX_COUNT = 14;                            // 떠다니는 입자 개수 (많을수록 무거움)
@@ -26,10 +25,9 @@ var FX_LOADER      = true;   // 페이지 넘어갈 때 로딩화면 + 레이아
 var FX_LOADER_IMG  = '';     // 로딩화면 가운데 이미지 URL. 비우면 자동: 마스코트(--char) → SOOP 프사 → 글자
 var FX_LOADER_TEXT = '';     // 이미지 없을 때/이름표에 띄울 글자. 비우면 상단 로고 글자 자동
 var FX_TRANS_MS    = 800;    // 커지는 등장 길이(ms). 더 느리게 = 숫자 ↑ / 더 빠르게 = 숫자 ↓
-/* 예)  별 테마 :  FX_FLOAT=['★','✦','☆'];   FX_CLICK='★';
+/* 예)  별 테마 :  FX_FLOAT=['','✦','☆'];   FX_CLICK='★';
         토끼 테마:  FX_FLOAT=['🐰','✦','♡'];  FX_CLICK='🐰';
         음표 테마:  FX_FLOAT=['♪','♫','✦'];   FX_CLICK='♪';                 */
-/* ────────────────────────────────────────────────────── */
 
 (function () {
   var mqReduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -132,7 +130,6 @@ var FX_TRANS_MS    = 800;    // 커지는 등장 길이(ms). 더 느리게 = 숫
       setTimeout(function () { location.href = a.href; }, 360);
     }, true);
   }
-
 
   function build() {
     /* 떠다니는 입자 */

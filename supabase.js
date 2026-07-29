@@ -1,6 +1,6 @@
 /* =============================================
    supabase.js — Supabase 연동 공통 스크립트
-   ✅ 이 파일 상단 두 줄만 본인 값으로 교체!
+   프로젝트를 새로 만들면 아래 두 줄만 교체
    ============================================= */
 
 const SUPABASE_URL  = 'https://rzanqycrugadspyrrvkf.supabase.co';
@@ -138,7 +138,6 @@ function initIframeResize() {
    일정/노래/일기/업보 페이지는 enableIframeAutoHeight() 라는 이름으로 호출합니다.
    이 별칭이 없으면 그 페이지들에서 "함수 없음" 에러가 나고 iframe 높이가 자동조절되지 않습니다. */
 function enableIframeAutoHeight() { initIframeResize(); }
-
 
 /* =============================================
    🎨 색상 팔레트 자동 적용 (전 페이지 공통)

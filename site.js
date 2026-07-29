@@ -3,14 +3,10 @@
    · 프로필 데이터 1회 로드 → 전 페이지 공유 (P / pv)
    · 사이트 전역 요소 자동 적용 (배경사진 · 로고 · 머리말 · 푸터 · 문의 모달)
    · 다크모드 저장/복원 · 문의 전송 · 공통 유틸
-   ⚠️ supabase.js 보다 "뒤", fx.js 보다 "앞"에 넣으세요.
+   로드 순서: supabase.js → site.js → fx.js
    ============================================================= */
 
-/* ─────────────────────────────────────────────
-   기본값 — DB가 비어 있을 때 화면에 뜨는 값
-   admin 에서 값을 넣으면 전부 덮어써집니다.
-   ⚠️ 여기 키 = admin profileKeys = 페이지 data-hook/data-site (3곳 동일)
-   ───────────────────────────────────────────── */
+/* 기본값 — DB가 비어 있을 때 화면에 뜨는 값 / admin 에서 값을 넣으면 전부 덮어써집니다. / ️ 여기 키 = admin profileKeys = 페이지 data-hook/data-site (3곳 동일) */
 var DEF = {
   /* 프사 · 이름 */
   'avatar': '', 'soop-id': 'baerong2',
@@ -51,7 +47,7 @@ var DEF = {
   'main-copy': 'BE SWEET|STAY A WHILE',
   'ghost-text': 'baerong ♡',
   'footer-note': 'be sweet, stay a while ♡',
-  'footer-copy': '© 2026 배롱 (BAERONG) Official.',
+  'footer-copy': 'BAERONG OFFICIAL · © 2026',
   'footer-email': 'baerong2486@gmail.com',
   'ask-title': '쪽지 남기기',
   'ask-desc': '배롱에게 하고 싶은 말을 남겨주세요. 익명으로 전달돼요 🍀',
@@ -79,9 +75,7 @@ var DEF = {
 var P = {};                       /* 로드된 프로필 데이터 */
 function pv(k){ var v = asText(P[k]).trim(); return v || (DEF[k] || ''); }
 
-/* ─────────────────────────────────────────────
-   유틸
-   ───────────────────────────────────────────── */
+/* 유틸 */
 function esc(s) {
   return String(s == null ? '' : s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;')
@@ -146,9 +140,7 @@ function anniversary(ymd) {
 }
 function ddLabel(n) { return n == null ? '' : (n === 0 ? 'D-DAY 🎉' : 'D-' + n); }
 
-/* ─────────────────────────────────────────────
-   프로필 로드 (페이지마다 1회)
-   ───────────────────────────────────────────── */
+/* 프로필 로드 (페이지마다 1회) */
 async function loadProfile() {
   try {
     const { data } = await db.from('profile').select('data').eq('id', 1).single();
@@ -157,9 +149,7 @@ async function loadProfile() {
   return P;
 }
 
-/* ─────────────────────────────────────────────
-   사이트 전역 적용 — 전 페이지 공통
-   ───────────────────────────────────────────── */
+/* 사이트 전역 적용 — 전 페이지 공통 */
 function applySite() {
   var root = document.documentElement;
   var sub = document.body.classList.contains('sub');
@@ -214,9 +204,7 @@ function applySite() {
   if (t) document.title = pv('info-name') + ' · ' + t;
 }
 
-/* ─────────────────────────────────────────────
-   다크모드
-   ───────────────────────────────────────────── */
+/* 다크모드 */
 function initTheme() {
   var btn = document.getElementById('dkToggle');
   if (btn) btn.addEventListener('click', function () {
@@ -231,9 +219,7 @@ function paintKnob() {
   if (k) k.textContent = document.body.classList.contains('dark') ? '☀' : '☾';
 }
 
-/* ─────────────────────────────────────────────
-   문의 모달
-   ───────────────────────────────────────────── */
+/* 문의 모달 */
 function openAsk() { var m = document.getElementById('askmask'); if (m) m.classList.add('on'); }
 function closeAsk() { var m = document.getElementById('askmask'); if (m) m.classList.remove('on'); }
 async function sendAsk() {

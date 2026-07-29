@@ -55,6 +55,7 @@
     .krow { display:flex; align-items:center; gap:9px; padding:10px 13px; margin-bottom:7px; border:1px dashed var(--pline); background:color-mix(in srgb, var(--main-light) 50%, transparent); }
     .krow .kn { flex:1; font-size:13.5px; color:var(--text); font-weight:600; word-break:keep-all; }
     .krow .kev { flex:none; font:800 9.5px/1.6 var(--f-micro); color:#96751e; background:#fbf0d5; padding:1px 8px; border-radius:999px; }
+    .krow .kev.방셀 { color:#456c95; background:#dde8f5; }
     .krow .kc { flex:none; min-width:44px; text-align:center; font-size:13px; font-weight:900; color:var(--main-deep); background:var(--card); border:1.5px solid var(--main-light); border-radius:999px; padding:3px 11px; }
   </style>
 </head>
@@ -110,7 +111,7 @@
 <div class="ghost-mark" aria-hidden="true" data-site="ghost-text">baerong ♡</div>
 <footer>
   <span class="fnote" data-site="footer-note">be sweet, stay a while ♡</span>
-  <span data-site="footer-copy">© 2026 배롱 (BAERONG) Official.</span><br>
+  <span data-site="footer-copy">BAERONG OFFICIAL · © 2026</span><br>
   <span id="footEmail">비즈니스 문의 — baerong2486@gmail.com</span>
 </footer>
 <div class="askmask" id="askmask">
@@ -174,7 +175,8 @@ function openMo(vid){
   counts.filter(function(c){ return c.viewer_id === vid; }).forEach(function(c){ mine[c.type_id] = c.count; });
   var rows = types.filter(function(t){ return (mine[t.id] || 0) > 0; }).map(function(t){
     return '<div class="krow"><span class="kn">' + esc(asText(t.name)) + '</span>' +
-      (asText(t.category) === '이벤트' ? '<span class="kev">이벤트</span>' : '') +
+      (asText(t.category) && asText(t.category) !== '일반'
+         ? '<span class="kev ' + esc(asText(t.category)) + '">' + esc(asText(t.category)) + '</span>' : '') +
       '<span class="kc">×' + mine[t.id] + '</span></div>';
   }).join('');
   document.getElementById('moBody').innerHTML = rows ||

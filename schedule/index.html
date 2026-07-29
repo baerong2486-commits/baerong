@@ -60,6 +60,10 @@
     .cal-cell.has:hover { transform:translateY(-3px); box-shadow:var(--shadow); border-color:var(--main-dark); }
     .cal-cell.today { background:var(--main-light); border-color:var(--main-dark); box-shadow:3px 4px 0 rgba(183,133,151,.16); }
     .cal-cell.today .cal-d { background:var(--main-dark); color:#fff; border-radius:999px; padding:2px 7px; }
+    .cal-cell.today::after {
+      content:'♥'; position:absolute; top:6px; right:9px;
+      font-size:12px; color:var(--main-dark);
+    }
     /* 하이라이트 = 분홍 점선 테두리 + 날짜 옆 하트 */
     .cal-cell.hl { border:2px dashed var(--main-dark); background:color-mix(in srgb, var(--main-light) 76%, transparent); }
     .cal-cell.hl::after {
@@ -73,6 +77,12 @@
       font-size:9.5px; padding:3px 8px; border-radius:999px; margin-top:4px;
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-weight:700;
     }
+    /* Band: negative margin must equal cell padding (7px) + border (1.5px). */
+    .ev.band { border-radius:0; margin-left:-8.5px; margin-right:-8.5px; padding-left:8px; padding-right:8px; }
+    .ev.band.s { border-radius:999px 0 0 999px; margin-left:0; padding-left:8px; }
+    .ev.band.e { border-radius:0 999px 999px 0; margin-right:0; padding-right:8px; }
+    .ev.band.s.e { border-radius:999px; }
+    .ev.band.mid { color:transparent; }
     .c-green{background:#dcefe3;color:#3f7a5c}.c-pink{background:#fbe0ea;color:#b1607f}
     .c-yellow{background:#fbf0d5;color:#96751e}.c-orange{background:#fbe4d3;color:#a5642c}
     .c-blue{background:#dde8f5;color:#456c95}.c-purple{background:#e7dff2;color:#6f5399}
@@ -172,7 +182,7 @@
 <div class="ghost-mark" aria-hidden="true" data-site="ghost-text">baerong ♡</div>
 <footer>
   <span class="fnote" data-site="footer-note">be sweet, stay a while ♡</span>
-  <span data-site="footer-copy">© 2026 배롱 (BAERONG) Official.</span><br>
+  <span data-site="footer-copy">BAERONG OFFICIAL · © 2026</span><br>
   <span id="footEmail">비즈니스 문의 — baerong2486@gmail.com</span>
 </footer>
 <div class="askmask" id="askmask">
@@ -197,6 +207,13 @@ var rows = [], curY, curM, streamDays = [];
 
 function isOff(s){ return asText(s.type) === '휴방'; }
 function cls(s){ return 'c-' + (asText(s.color) || (isOff(s) ? 'pink' : 'green')); }
+/* A row occupies date..end_date inclusive; end_date empty = single day. */
+function onDate(key){
+  return rows.filter(function(r){
+    var st = asText(r.date), en = asText(r.end_date) || st;
+    return key >= st && key <= en;
+  });
+}
 function ymd(d){
   return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
 }
@@ -211,7 +228,7 @@ function renderWeek(){
   for (var i = 0; i < 7; i++) {
     var d = new Date(mon); d.setDate(mon.getDate() + i);
     var key = ymd(d);
-    var evs = rows.filter(function(r){ return asText(r.date) === key; });
+    var evs = onDate(key);
     var isToday = key === ymd(now);
     var body;
     if (evs.length) {
@@ -246,12 +263,18 @@ function renderCal(){
   for (var i = start-1; i >= 0; i--) html += '<div class="cal-cell other"><span class="cal-d">' + (prevLast-i) + '</span></div>';
   for (var d = 1; d <= last.getDate(); d++) {
     var key = curY + '-' + String(curM+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
-    var evs = rows.filter(function(r){ return asText(r.date) === key; });
+    var evs = onDate(key);
     var isToday = (today.getFullYear()===curY && today.getMonth()===curM && today.getDate()===d);
     var hl = evs.some(function(e){ return !!e.highlight; });
     var evHtml = evs.map(function(e){
       var label = (asText(e.time) ? asText(e.time) + ' ' : '') + (asText(e.title) || (isOff(e) ? '휴방' : '방송'));
-      return '<div class="ev ' + cls(e) + '" title="' + esc(label) + '">' + esc(label) + '</div>';
+      var end = asText(e.end_date);
+      if (!end || end === asText(e.date)) {
+        return '<div class="ev ' + cls(e) + '" title="' + esc(label) + '">' + esc(label) + '</div>';
+      }
+      var isS = key === asText(e.date), isE = key === end;
+      var k = 'ev band ' + cls(e) + (isS ? ' s' : '') + (isE ? ' e' : '') + (isS ? '' : ' mid');
+      return '<div class="' + k + '" title="' + esc(label) + '">' + esc(label) + '</div>';
     }).join('');
     html += '<div class="cal-cell' + (isToday?' today':'') + (evs.length?' has':'') + (hl?' hl':'') + '"' +
             (evs.length ? ' onclick="openMo(\'' + key + '\')"' : '') + '>' +
@@ -274,14 +297,15 @@ function moveMonth(n){
 function renderUpcoming(){
   var el = document.getElementById('upcoming');
   var today = ymd(new Date());
-  var up = rows.filter(function(r){ return asText(r.date) >= today; }).slice(0, 12);
+  var up = rows.filter(function(r){ return (asText(r.end_date) || asText(r.date)) >= today; }).slice(0, 12);
   if (!up.length){ el.innerHTML = '<div class="empty"><div class="empty-icon">✿</div>아직 적어둔 일정이 없어요</div>'; return; }
   el.innerHTML = up.map(function(s){
     var d = new Date(asText(s.date) + 'T00:00:00');
     var label = isOff(s) ? '휴방' : '방송';
     var times = [asText(s.time), asText(s.time2)].filter(Boolean).join(' · ');
     return '<div class="up" onclick="openMo(\'' + esc(asText(s.date)) + '\')">' +
-      '<div class="dt">' + String(d.getMonth()+1).padStart(2,'0') + '.' + String(d.getDate()).padStart(2,'0') + ' (' + DOW[d.getDay()] + ')</div>' +
+      '<div class="dt">' + String(d.getMonth()+1).padStart(2,'0') + '.' + String(d.getDate()).padStart(2,'0') + ' (' + DOW[d.getDay()] + ')' +
+        (asText(s.end_date) && asText(s.end_date) !== asText(s.date) ? '<br><span style="font-weight:400">~ ' + esc(asText(s.end_date).slice(5).replace('-','.')) + '</span>' : '') + '</div>' +
       '<div class="in"><div class="ti">' + esc(asText(s.title) || label) + '</div>' +
       (times ? '<div class="tm">' + esc(times) + '</div>' : '') + '</div>' +
       '<span class="bd ' + cls(s) + '">' + label + '</span></div>';
@@ -290,7 +314,7 @@ function renderUpcoming(){
 
 /* ── 상세 ── */
 function openMo(key){
-  var evs = rows.filter(function(r){ return asText(r.date) === key; });
+  var evs = onDate(key);
   if (!evs.length) return;
   var d = new Date(key + 'T00:00:00');
   var html = '<div class="md">' + key + ' (' + DOW[d.getDay()] + ')</div>';

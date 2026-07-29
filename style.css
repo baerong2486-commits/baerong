@@ -81,9 +81,7 @@ body.dark {
   --shadow-hover: 0 20px 44px rgba(0,0,0,.55);
 }
 
-/* ═══════════════════════════════════════════
-   기본
-   ═══════════════════════════════════════════ */
+/* 기본 */
 * { box-sizing: border-box; }
 html, body { width:100%; min-height:100%; margin:0; }
 
@@ -117,10 +115,7 @@ body.sub.dark {
     var(--site-bg);
 }
 
-/* ═══════════════════════════════════════════
-   상단바 — 마스킹 테이프 (메인·서브 100% 동일 마크업/CSS)
-   시트와 같은 폭·같은 좌우 여백으로 정렬됩니다.
-   ═══════════════════════════════════════════ */
+/* 상단바 — 마스킹 테이프 (메인·서브 100% 동일 마크업/CSS) / 시트와 같은 폭·같은 좌우 여백으로 정렬됩니다. */
 .flower-header {
   position: relative; z-index: 10;
   max-width: var(--page-width); margin: 0 auto;
@@ -199,6 +194,7 @@ body:not(.sub) .flower-nav a::after {
 }
 /* ③ 메인에서는 "메인" 버튼 숨김 (자기 페이지로 가는 버튼) */
 body[data-page="home"] .flower-nav a[data-nav="home"] { display: none; }
+body[data-page="home"] .flower-logo { pointer-events: none; cursor: default; }
 
 /* 현재 페이지 = 진한 테이프 (마크업은 전 페이지 동일, body[data-page]로만 구분) */
 body[data-page="home"]     .flower-nav a[data-nav="home"],
@@ -268,9 +264,7 @@ body:not(.sub) .ask { background: var(--tape-solid); }
   .ask { font-size: 13px; padding: 9px 14px; }
 }
 
-/* ═══════════════════════════════════════════
-   다이어리 속지 (서브페이지 콘텐츠 시트)
-   ═══════════════════════════════════════════ */
+/* 다이어리 속지 (서브페이지 콘텐츠 시트) */
 .dwrap {
   position: relative; z-index: 2;
   max-width: var(--page-width);
@@ -543,9 +537,7 @@ footer .fnote { font-family: var(--f-note); font-size:17px; color: var(--main-da
   letter-spacing:.06em; margin:6px 0 0; pointer-events:none; user-select:none;
 }
 
-/* ═══════════════════════════════════════════
-   문의 모달
-   ═══════════════════════════════════════════ */
+/* 문의 모달 */
 .askmask { display:none; position:fixed; inset:0; background:rgba(50,36,42,.5); z-index:900; place-items:center; padding:20px; }
 .askmask.on { display:grid; }
 .askmodal {
@@ -572,9 +564,7 @@ footer .fnote { font-family: var(--f-note); font-size:17px; color: var(--main-da
 .askbtns .no { background: var(--main-light); color: var(--main-deep); }
 .askbtns .yes { background: var(--main-dark); color:#fff; }
 
-/* ═══════════════════════════════════════════
-   라이트박스 (옷장 확대)
-   ═══════════════════════════════════════════ */
+/* 라이트박스 (옷장 확대) */
 .lightbox { position:fixed; inset:0; background:rgba(30,22,26,.88); display:none; align-items:center; justify-content:center; z-index:920; padding:24px; }
 .lightbox.open { display:flex; }
 .lightbox .inner { display:flex; flex-direction:column; align-items:center; max-width:92%; max-height:90%; }
@@ -584,9 +574,7 @@ footer .fnote { font-family: var(--f-note); font-size:17px; color: var(--main-da
 .lightbox .cap .d { font-size:13px; opacity:.82; margin-top:5px; max-width:520px; line-height:1.6; }
 .lightbox .x { position:absolute; top:16px; right:24px; color:#fff; font-size:34px; cursor:pointer; line-height:1; opacity:.85; }
 
-/* ═══════════════════════════════════════════
-   FOUC 방지 + 등장 애니
-   ═══════════════════════════════════════════ */
+/* FOUC 방지 + 등장 애니 */
 .wrap { opacity:0; transition: opacity .3s; }
 body.ready .wrap { opacity:1; }
 @keyframes staggerIn { from { opacity:0; transform:translateY(16px);} to { opacity:1; transform:none;} }
@@ -604,9 +592,7 @@ body.ready .stagger > *:nth-child(n+7){animation-delay:.34s}
   *, *::before, *::after { transition:none !important; }
 }
 
-/* ═══════════════════════════════════════════
-   관리자 페이지 공용 (container / page-title)
-   ═══════════════════════════════════════════ */
+/* 관리자 페이지 공용 (container / page-title) */
 .container {
   position:relative; z-index:1;
   max-width: 980px; margin:0 auto;
