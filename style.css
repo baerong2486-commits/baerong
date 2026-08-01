@@ -97,6 +97,17 @@ a { color: inherit; text-decoration: none; }
 img { max-width: 100%; }
 
 /* 서브페이지 전용 풀블리드 고정 배경 (§0.0.6 — body 배경 레이어 + fixed) */
+/* Cover-type main: the stage is ratio-locked, so leftover height must not show the
+   body photo. Solid colour + flex-start (not center, which drops the cover mid-screen). */
+body[data-page="home"], body[data-page="home"].dark {
+  background-image:none;
+  background-color:var(--bg);
+  min-height:100svh;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+}
+
 body.sub {
   background-image:
     linear-gradient(180deg,
@@ -309,6 +320,8 @@ body:not(.sub) .ask { background: var(--tape-solid); }
 }
 .doodle.d1 { right:3.4%; top:8%;  font-size:28px; transform:rotate(10deg); }
 .doodle.d2 { right:1.6%; bottom:8%; font-size:19px; transform:rotate(-12deg); }
+/* Decorative only: below 900 the sheet gets narrow and these sit on top of the copy. */
+@media (max-width:900px){ .doodle { display:none; } }
 
 /* 시트 머리말 = 잡지 표지급 히어로 */
 .sheet-head { margin-bottom: 18px; }
@@ -564,6 +577,20 @@ footer .fnote { font-family: var(--f-note); font-size:17px; color: var(--main-da
 .askbtns .no { background: var(--main-light); color: var(--main-deep); }
 .askbtns .yes { background: var(--main-dark); color:#fff; }
 
+/* Inside an iframe, position:fixed is relative to the whole iframe box, not the visible
+   area. SOOP fixes that box to a tall pixel value, so a centred modal lands far below
+   the fold. In embeds we switch to absolute and place it at the last click position. */
+body.embed .askmask,
+body.embed .ov,
+body.embed .lightbox {
+  position:absolute; top:0; left:0; right:0; bottom:auto;
+}
+body.embed .askmask.on { place-items:start center; }
+body.embed .ov.on,
+body.embed .lightbox.open { align-items:flex-start; }
+body.embed .lightbox .x { position:absolute; }
+body.embed .toast { position:absolute; }
+
 /* 라이트박스 (옷장 확대) */
 .lightbox { position:fixed; inset:0; background:rgba(30,22,26,.88); display:none; align-items:center; justify-content:center; z-index:920; padding:24px; }
 .lightbox.open { display:flex; }
@@ -575,8 +602,10 @@ footer .fnote { font-family: var(--f-note); font-size:17px; color: var(--main-da
 .lightbox .x { position:absolute; top:16px; right:24px; color:#fff; font-size:34px; cursor:pointer; line-height:1; opacity:.85; }
 
 /* FOUC 방지 + 등장 애니 */
-.wrap { opacity:0; transition: opacity .3s; }
-body.ready .wrap { opacity:1; }
+/* Data gate: content stays hidden until the DB values are painted.
+   Uses visibility so fx.js's fxPop (which animates opacity) cannot reveal it early. */
+.wrap { visibility:hidden; opacity:0; transition: opacity .28s; }
+body.ready .wrap { visibility:visible; opacity:1; }
 @keyframes staggerIn { from { opacity:0; transform:translateY(16px);} to { opacity:1; transform:none;} }
 body.ready .stagger > * { opacity:0; animation: staggerIn .4s ease forwards; }
 body.ready .stagger > *:nth-child(1){animation-delay:.04s}

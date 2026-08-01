@@ -141,11 +141,32 @@ function anniversary(ymd) {
 function ddLabel(n) { return n == null ? '' : (n === 0 ? 'D-DAY 🎉' : 'D-' + n); }
 
 /* 프로필 로드 (페이지마다 1회) */
+/* Last known values are cached so a revisit paints the correct text on the first frame
+   instead of the HTML placeholders. Cache is refreshed after every successful fetch. */
+var PCACHE_KEY = 'br-profile-cache';
+
+function readCache() {
+  try {
+    var raw = localStorage.getItem(PCACHE_KEY);
+    if (!raw) return null;
+    var o = JSON.parse(raw);
+    return (o && typeof o === 'object' && o.data && typeof o.data === 'object') ? o.data : null;
+  } catch (e) { return null; }
+}
+function writeCache(data) {
+  try { localStorage.setItem(PCACHE_KEY, JSON.stringify({ at: Date.now(), data: data })); } catch (e) {}
+}
+
 async function loadProfile() {
+  var cached = readCache();
+  if (cached) P = cached;                 /* paint immediately, then refresh below */
   try {
     const { data } = await db.from('profile').select('data').eq('id', 1).single();
-    P = (data && data.data) || {};
-  } catch (e) { P = {}; }
+    if (data && data.data && typeof data.data === 'object') {
+      P = data.data;
+      writeCache(P);
+    } else if (!cached) { P = {}; }
+  } catch (e) { if (!cached) P = {}; }
   return P;
 }
 
@@ -235,11 +256,47 @@ async function sendAsk() {
 
 function markReady() { document.body.classList.add('ready'); }
 
+/* Embed handling. In an iframe, position:fixed resolves against the whole iframe box,
+   so modals must be placed at the last click position instead of the box centre. */
+var EMBED = (function () { try { return window.self !== window.top; } catch (e) { return true; } })();
+var lastClickY = 0;
+
+function placeMask(el) {
+  if (!EMBED || !el) return;
+  var inner = el.querySelector('.askmodal, .mo, .inner');
+  var dh = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+  el.style.height = dh + 'px';
+  var ih = inner ? inner.offsetHeight : 280;
+  var y = Math.round(Math.max(16, Math.min(lastClickY - ih / 2, dh - ih - 16)));
+  if (inner) inner.style.marginTop = y + 'px';
+  var x = el.querySelector('.x');
+  if (x) x.style.top = Math.max(8, y - 34) + 'px';
+  var t = document.getElementById('toast');
+  if (t) t.style.top = Math.min(dh - 80, y + ih + 20) + 'px';
+}
+
+function initEmbed() {
+  if (!EMBED) return;
+  document.body.classList.add('embed');
+  document.addEventListener('click', function (e) { if (e.pageY) lastClickY = e.pageY; }, true);
+  /* Catches modals added later without touching each one individually. */
+  new MutationObserver(function (muts) {
+    muts.forEach(function (r) {
+      var t = r.target;
+      if (t.matches && t.matches('.askmask, .ov, .lightbox') &&
+          (t.classList.contains('on') || t.classList.contains('open') || t.classList.contains('show'))) {
+        placeMask(t);
+      }
+    });
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['class'], subtree: true });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
+  initEmbed();
   initTheme();
   var mask = document.getElementById('askmask');
   if (mask) mask.addEventListener('click', function (e) { if (e.target === mask) closeAsk(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAsk(); });
-  setTimeout(markReady, 1400);            /* 데이터가 늦어도 영영 숨지 않게 */
+  setTimeout(markReady, 2500);            /* fallback: never stay hidden if the fetch hangs */
   try { if (typeof initIframeResize === 'function') initIframeResize(); } catch (e) {}
 });

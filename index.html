@@ -8,16 +8,23 @@
   <link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/ba/baerong2/baerong2.jpg">
   <link rel="stylesheet" href="./style.css">
   <style>
-    /* =========================================================
-       메인 전용 레이아웃 (상단바·색·공통 부품은 style.css)
-       ========================================================= */
+    /* Main cover. Design basis 1600x900.
+       The stage keeps a fixed 16:9 ratio so SOOP's fixed-pixel iframe height cannot
+       stretch it; every size inside is derived from container width (cqw), never vh.
+       Sizes have no px upper bound inside the ratio box - a cap would break the ratio. */
     .concept-two {
-      position:relative; width:100%; min-height:var(--screen-h);
-      overflow:hidden; isolation:isolate; background:var(--bg);
+      position:relative;
+      width:min(100%, calc(100svh * 16 / 9));
+      margin:0 auto;
+      aspect-ratio:16/9;
+      overflow:hidden;
+      isolation:isolate;
+      background:var(--bg);
+      container-type:inline-size;
     }
     .flower-photo {
       position:absolute; z-index:0; inset:0; width:100%; height:100%;
-      object-fit:cover; object-position:center 40%; transform:scale(1.015);
+      object-fit:cover; object-position:center 40%;
     }
     .flower-wash {
       position:absolute; z-index:1; inset:0;
@@ -31,52 +38,55 @@
         linear-gradient(0deg, rgba(16,12,15,.58), transparent 55%);
     }
 
+    /* Header keeps px sizing so it matches the sub pages exactly (no jump on navigation). */
+    .concept-two > .flower-header { position:absolute; z-index:10; top:0; left:0; right:0; }
+
     .flower-layout {
-      position:relative; z-index:2;
-      height:calc(var(--screen-h) - var(--hdr-h));
-      opacity:0; transition:opacity .34s ease;
+      position:absolute; z-index:2; inset:var(--hdr-h) 0 0 0;
+      visibility:hidden; opacity:0; transition:opacity .3s ease;
     }
-    body.ready .flower-layout { opacity:1; }
+    body.ready .flower-layout { visibility:visible; opacity:1; }
     @media (prefers-reduced-motion: reduce){ .flower-layout{ opacity:1; } }
 
-    /* ── 종이 (프로필 노트) ── */
+    /* Paper note */
     .flower-paper {
-      position:absolute; left:clamp(20px,5.4vw,104px); top:35.5%;
-      width:clamp(360px,32.5vw,625px);
-      padding:clamp(24px,3.2vh,38px) clamp(24px,2.7vw,50px) clamp(20px,2.6vh,32px);
+      position:absolute; left:5.4cqw; top:34%;
+      width:39cqw;
+      padding:2.4cqw 3.1cqw 2cqw;
       color:var(--text); background:color-mix(in srgb, var(--card) 94%, transparent);
-      box-shadow:0 26px 60px rgba(35,28,33,.21);
-      transform:translateY(-50%) rotate(-.35deg) scale(1.06);
+      box-shadow:0 1.6cqw 3.7cqw rgba(35,28,33,.21);
+      transform:translateY(-50%) rotate(-.35deg);
       transform-origin:center; backdrop-filter:blur(7px);
     }
     .flower-paper::before {
       content:''; position:absolute; inset:0; pointer-events:none; opacity:.4;
-      background:repeating-linear-gradient(0deg, transparent 0 31px, var(--paper-rule) 31px 32px);
+      background:repeating-linear-gradient(0deg, transparent 0 1.94cqw, var(--paper-rule) 1.94cqw 2cqw);
     }
-    .flower-paper::after { content:''; position:absolute; inset:14px; pointer-events:none; border:1px solid var(--pline); }
+    .flower-paper::after { content:''; position:absolute; inset:.87cqw; pointer-events:none; border:1px solid var(--pline); }
     .flower-paper > * { position:relative; z-index:2; }
 
-    .paper-tape { position:absolute; z-index:3; top:-12px; right:9%; width:100px; height:25px; background:var(--tape); transform:rotate(2deg); }
-    .paper-index { margin:0 0 6px; color:var(--main-dark); font:800 9px/1 var(--f-micro); letter-spacing:.18em; }
+    .paper-tape { position:absolute; z-index:3; top:-.75cqw; right:9%; width:6.25cqw; height:1.56cqw; background:var(--tape); transform:rotate(2deg); }
 
-    .paper-name { display:flex; align-items:flex-end; gap:16px; }
-    .paper-name > div small { display:block; margin:0 0 -3px 5px; color:var(--main-dark); font:800 8px/1 var(--f-micro); letter-spacing:.16em; opacity:.85; }
-    .paper-name h1 { margin:0; color:var(--main-deep); font:400 clamp(60px,4.8vw,92px)/.84 var(--f-hand); letter-spacing:-.025em; transform:rotate(-1deg); }
-    .paper-name > span { margin-bottom:8px; color:var(--main-dark); font:400 clamp(17px,1.35vw,25px)/1 var(--f-note); transform:rotate(1deg); }
+    .paper-name { display:flex; align-items:flex-end; gap:1cqw; }
+    /* h1 uses line-height .84, so glyphs rise ~14.5% of font-size above the line box.
+       Label spacing must clear that or the two texts overlap (element boxes look fine). */
+    .paper-name > div small { display:block; margin:0 0 1.05cqw .31cqw; color:var(--main-dark); font:800 max(8px,.5cqw)/1 var(--f-micro); letter-spacing:.16em; opacity:.85; }
+    .paper-name h1 { margin:0; color:var(--main-deep); font:400 5.75cqw/.84 var(--f-hand); letter-spacing:-.025em; transform:rotate(-1deg); }
+    .paper-name > span { margin-bottom:.5cqw; color:var(--main-dark); font:400 1.56cqw/1 var(--f-note); transform:rotate(1deg); }
 
     .paper-bio {
-      margin:11px 0 13px; color:var(--text-mid);
-      font-size:clamp(14px,1vw,18px); line-height:1.45; letter-spacing:-.035em; word-break:keep-all;
+      margin:.69cqw 0 .81cqw; color:var(--text-mid);
+      font-size:max(11px,1.12cqw); line-height:1.45; letter-spacing:-.035em; word-break:keep-all;
     }
 
-    /* 프로필 = 포스트잇 카드 (전 시안 복귀) */
+    /* Profile = sticky notes */
     .profile-notes {
       display:grid; grid-template-columns:repeat(3,1fr);
-      gap:clamp(7px,.62vw,11px); margin:0 0 13px;
+      gap:.56cqw; margin:0 0 .81cqw;
     }
     .pnote {
       position:relative; display:grid; gap:1px;
-      padding:11px 12px 12px;
+      padding:.69cqw .75cqw .75cqw;
       border:1px solid var(--pline); border-radius:6px 6px 9px 9px;
       background:color-mix(in srgb, var(--card) 84%, var(--main-light));
       box-shadow:2px 3px 0 rgba(183,133,151,.10);
@@ -84,102 +94,127 @@
     .pnote:nth-child(2n) { transform:rotate(.5deg); }
     .pnote:nth-child(3n) { transform:rotate(-.6deg); }
     .pnote::before {
-      content:''; position:absolute; left:9px; right:9px; top:-4px; height:9px;
-      background:radial-gradient(circle, #8c7780 0 1.3px, transparent 1.6px) 0 0/12px 9px repeat-x;
+      content:''; position:absolute; left:.56cqw; right:.56cqw; top:-.25cqw; height:.56cqw;
+      background:radial-gradient(circle, #8c7780 0 1.3px, transparent 1.6px) 0 0/12px .56cqw repeat-x;
       opacity:.5;
     }
-    .pn-k { font-size:11px; font-weight:700; color:var(--main-dark); letter-spacing:-.02em; }
-    .pn-v { font-size:clamp(13px,1.02vw,16px); font-weight:800; color:var(--text); letter-spacing:-.03em; word-break:keep-all; }
-    .pn-en { font:800 7.5px/1 var(--f-micro); letter-spacing:.13em; color:var(--text-soft); margin-top:3px; }
+    .pn-k { font-size:max(9px,.69cqw); font-weight:700; color:var(--main-dark); letter-spacing:-.02em; }
+    .pn-v { font-size:max(11px,1cqw); font-weight:800; color:var(--text); letter-spacing:-.03em; word-break:keep-all; }
+    .pn-en { font:800 max(7px,.47cqw)/1 var(--f-micro); letter-spacing:.13em; color:var(--text-soft); margin-top:.19cqw; }
     .pn-dd {
-      position:absolute; top:7px; right:8px;
-      padding:2px 7px; border-radius:999px;
+      position:absolute; top:.44cqw; right:.5cqw;
+      padding:.12cqw .44cqw; border-radius:999px;
       background:var(--main-dark); color:#fff;
-      font:800 8.5px/1.5 var(--f-micro); letter-spacing:.03em; white-space:nowrap;
+      font:800 max(8px,.53cqw)/1.5 var(--f-micro); letter-spacing:.03em; white-space:nowrap;
     }
-    @media(max-width:520px){ .profile-notes{ grid-template-columns:1fr; } }
 
-    /* 오늘 방송 */
+    /* Today */
     .today-card {
-      position:relative; padding:11px 15px 12px;
+      position:relative; padding:.69cqw .94cqw .75cqw;
       border:1px dashed var(--pline); background:color-mix(in srgb, var(--main-light) 78%, transparent);
       transform:rotate(.15deg);
     }
-    .today-head { display:flex; align-items:center; gap:10px; }
-    .today-head span { font:800 8px/1 var(--f-micro); letter-spacing:.12em; color:var(--main-dark); }
-    .today-head b { font:400 clamp(16px,1.05vw,20px)/1 var(--f-note); color:var(--text); }
-    .today-body { margin-top:7px; font-size:13.5px; font-weight:700; color:var(--text); line-height:1.5; word-break:keep-all; }
-    .today-body em { font-style:normal; display:block; margin-top:2px; font:800 10px/1.5 var(--f-micro); letter-spacing:.06em; color:var(--main-dark); }
-    .today-note { margin:6px 0 0; font-size:10.5px; color:var(--text-soft); line-height:1.4; }
+    .today-head { display:flex; align-items:center; gap:.62cqw; }
+    .today-head span { font:800 max(7px,.5cqw)/1 var(--f-micro); letter-spacing:.12em; color:var(--main-dark); }
+    .today-head b { font:400 max(13px,1.19cqw)/1 var(--f-note); color:var(--text); }
+    .today-body { margin-top:.44cqw; font-size:max(11px,.84cqw); font-weight:700; color:var(--text); line-height:1.5; word-break:keep-all; }
+    .today-body em { font-style:normal; display:block; margin-top:.12cqw; font:800 max(8px,.62cqw)/1.5 var(--f-micro); letter-spacing:.06em; color:var(--main-dark); }
+    .today-note { margin:.37cqw 0 0; font-size:max(8px,.66cqw); color:var(--text-soft); line-height:1.4; }
 
     .paper-doodle { position:absolute; z-index:3; color:color-mix(in srgb, var(--main-dark) 62%, transparent); font-family:var(--f-note); pointer-events:none; }
-    .paper-doodle-heart { right:8%; top:9%; font-size:28px; transform:rotate(10deg); }
-    .paper-doodle-flower { right:3%; bottom:17%; font-size:19px; transform:rotate(-12deg); }
+    .paper-doodle-heart { right:8%; top:9%; font-size:1.75cqw; transform:rotate(10deg); }
+    .paper-doodle-flower { right:3%; bottom:17%; font-size:1.19cqw; transform:rotate(-12deg); }
 
-    .paper-links { display:flex; gap:9px; margin-top:11px; flex-wrap:wrap; }
+    .paper-links { display:flex; gap:.56cqw; margin-top:.69cqw; flex-wrap:wrap; }
     .paper-links a {
-      flex:1; min-width:110px; display:flex; justify-content:space-between;
-      padding:11px 14px; border:1px solid var(--pline);
-      font:800 11px/1 var(--f-micro); letter-spacing:.08em; color:var(--main-deep);
+      flex:1; min-width:6.9cqw; display:flex; justify-content:space-between;
+      padding:.69cqw .87cqw; border:1px solid var(--pline);
+      font:800 max(9px,.69cqw)/1 var(--f-micro); letter-spacing:.08em; color:var(--main-deep);
       transition:var(--transition);
     }
     .paper-links a:hover { color:#fff; background:var(--main-dark); border-color:var(--main-dark); }
 
-    /* 가슴쪽 워드마크 */
+    /* Wordmark over the photo */
+    /* Sits on a bright part of the photo; measured 2.4:1 with a soft shadow alone,
+       so the shadow is layered to lift contrast without shrinking the wordmark. */
     .flower-message {
       position:absolute; left:52%; bottom:11%; margin:0; color:#fff;
-      font:400 clamp(52px,4.6vw,88px)/.9 var(--f-note);
-      letter-spacing:.035em; text-shadow:0 3px 18px rgba(39,30,37,.5); transform:rotate(-1deg);
+      font:400 5.5cqw/.9 var(--f-note);
+      letter-spacing:.035em; transform:rotate(-1deg);
+      text-shadow:
+        0 1px 2px rgba(39,30,37,.85),
+        0 2px 10px rgba(39,30,37,.7),
+        0 4px 26px rgba(39,30,37,.55);
       pointer-events:none;
     }
 
-    /* 우측 메뉴 */
-    .flower-side-menu {
-      position:absolute; right:clamp(28px,3vw,58px); top:12%;
-      width:clamp(128px,10vw,190px); padding:20px 0; color:#fff;
-      border-top:1px solid rgba(255,255,255,.45); border-bottom:1px solid rgba(255,255,255,.45);
-      text-shadow:0 2px 9px rgba(40,32,38,.3);
-    }
-    .flower-side-menu > p { margin:0 0 10px; color:rgba(255,255,255,.7); font:800 9px/1 var(--f-micro); letter-spacing:.18em; }
-    .flower-side-menu a {
-      display:flex; align-items:center; width:100%; gap:13px; padding:12px 0;
-      color:rgba(255,255,255,.72); border-bottom:1px solid rgba(255,255,255,.16);
-      font-size:clamp(14px,.95vw,18px); font-weight:700; transition:var(--transition);
-    }
-    .flower-side-menu a span { font:800 9px/1 var(--f-micro); }
-    .flower-side-menu a:hover { color:#fff; padding-left:8px; }
-    .flower-side-menu a:hover::after { content:'♡'; margin-left:auto; }
-
     .flower-bottom-copy {
       position:absolute; z-index:4; left:50%; bottom:3.5%;
-      display:flex; align-items:center; gap:17px;
-      color:rgba(255,255,255,.75); font:800 9px/1 var(--f-micro); letter-spacing:.2em;
+      display:flex; align-items:center; gap:1.06cqw;
+      color:rgba(255,255,255,.75); font:800 max(8px,.56cqw)/1 var(--f-micro); letter-spacing:.2em;
       text-shadow:0 2px 9px rgba(40,32,38,.3); pointer-events:none;
     }
-    .flower-bottom-copy i { color:#f5ced9; font:400 21px/1 Georgia, serif; font-style:normal; }
+    .flower-bottom-copy i { color:#f5ced9; font:400 1.31cqw/1 Georgia, serif; font-style:normal; }
 
-    @media (max-width:900px){
-      /* 사진이 위에 크게 보이고, 그 아래로 종이가 겹쳐 올라오는 구성 */
-      .concept-two { min-height:auto; overflow:visible; }
-      .flower-photo { height:56vh; object-position:center 20%; transform:none; }
-      .flower-wash { height:56vh; }
-      .flower-layout { height:auto; min-height:0; padding:40vh 0 28px; }
+    /* Below 960 the ratio is released and the page stacks vertically.
+       cqw would collapse here (390px container = 24% of design), so every visible size
+       is re-declared in real px. Widths only - vh would blow up inside the SOOP app. */
+    @media (max-width:959px){
+      .concept-two {
+        --photoH:clamp(280px,86vw,480px);
+        width:auto; aspect-ratio:auto; height:auto; min-height:0;
+        overflow:visible; container-type:normal;
+      }
+      .concept-two > .flower-header { position:relative; }
+      .flower-photo { height:var(--photoH); object-position:center 20%; }
+      .flower-wash  { height:var(--photoH); }
+      .flower-layout {
+        position:static; inset:auto;
+        padding:calc(var(--photoH) - 142px) 0 28px;
+      }
       .flower-paper {
         position:relative; left:auto; top:auto; width:auto;
         margin:0 14px; padding:26px 20px 22px; transform:rotate(-.3deg);
+        box-shadow:0 14px 34px rgba(35,28,33,.21);
       }
+      .flower-paper::before { background:repeating-linear-gradient(0deg, transparent 0 31px, var(--paper-rule) 31px 32px); }
+      .flower-paper::after { inset:14px; }
+      .paper-tape { top:-12px; width:100px; height:25px; }
       .paper-name { display:block; }
-      .paper-name > span { display:block; margin:2px 0 10px; }
+      /* Cap display type in the mobile branch (the ratio box forbids caps, this branch needs one).
+         The subtitle is a separate flex row, so a tall glyph can no longer reach it. */
+      .paper-name { display:flex; flex-direction:column; align-items:flex-start; gap:0; }
+      .paper-name h1 { font-size:clamp(52px,13vw,84px); line-height:1.04; }
+      .paper-name > span { display:block; margin:8px 0 10px; font-size:19px; }
+      .paper-name > div small { font-size:8px; margin:0 0 14px 5px; }
+      .paper-bio { margin:11px 0 13px; font-size:15px; }
+      .profile-notes { grid-template-columns:repeat(3,1fr); gap:8px; margin:0 0 13px; }
+      .pnote { padding:11px 12px 12px; }
+      .pnote::before { left:9px; right:9px; top:-4px; height:9px; background-size:12px 9px; }
+      .pn-k { font-size:11px; } .pn-v { font-size:14px; } .pn-en { font-size:7.5px; margin-top:3px; }
+      .pn-dd { top:7px; right:8px; padding:2px 7px; font-size:8.5px; }
+      .today-card { padding:11px 15px 12px; }
+      .today-head { gap:10px; }
+      .today-head span { font-size:8px; } .today-head b { font-size:17px; }
+      .today-body { margin-top:7px; font-size:13.5px; }
+      .today-body em { margin-top:2px; font-size:10px; }
+      .today-note { margin:6px 0 0; font-size:10.5px; }
+      .paper-doodle-heart { font-size:28px; } .paper-doodle-flower { font-size:19px; }
+      .paper-links { gap:9px; margin-top:11px; }
+      .paper-links a { min-width:110px; padding:11px 14px; font-size:11px; }
       .flower-bottom-copy { display:none; }
       .flower-message {
-        left:18px; right:auto; bottom:auto; top:31vh;
+        left:18px; right:auto; bottom:auto;
+        top:calc(var(--photoH) - 118px);
         font-size:clamp(38px,12vw,58px);
       }
     }
-    @media (max-width:420px){
-      .flower-photo, .flower-wash { height:48vh; }
-      .flower-layout { padding-top:34vh; }
-      .flower-message { top:26vh; }
+    @media (max-width:520px){
+      .profile-notes { grid-template-columns:1fr 1fr; }
+      .concept-two { --photoH:clamp(240px,78vw,380px); }
+    }
+    @media (max-width:380px){
+      .profile-notes { grid-template-columns:1fr; }
     }
   </style>
 </head>
