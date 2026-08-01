@@ -97,16 +97,17 @@ a { color: inherit; text-decoration: none; }
 img { max-width: 100%; }
 
 /* 서브페이지 전용 풀블리드 고정 배경 (§0.0.6 — body 배경 레이어 + fixed) */
-/* Cover-type main: the stage is ratio-locked, so leftover height must not show the
-   body photo. Solid colour + flex-start (not center, which drops the cover mid-screen). */
+/* Cover-type main: the stage spans the full width and is ratio-locked, so leftover
+   height must not show the body photo. Solid colour, content aligned to the top. */
 body[data-page="home"], body[data-page="home"].dark {
   background-image:none;
   background-color:var(--bg);
   min-height:100svh;
   display:flex;
-  align-items:flex-start;
-  justify-content:center;
+  flex-direction:column;
+  align-items:stretch;
 }
+body[data-page="home"] { overflow-x:hidden; }
 
 body.sub {
   background-image:

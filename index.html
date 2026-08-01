@@ -14,8 +14,7 @@
        Sizes have no px upper bound inside the ratio box - a cap would break the ratio. */
     .concept-two {
       position:relative;
-      width:min(100%, calc(100svh * 16 / 9));
-      margin:0 auto;
+      width:100%;
       aspect-ratio:16/9;
       overflow:hidden;
       isolation:isolate;
@@ -41,10 +40,18 @@
     /* Header keeps px sizing so it matches the sub pages exactly (no jump on navigation). */
     .concept-two > .flower-header { position:absolute; z-index:10; top:0; left:0; right:0; }
 
+    /* fx.js targets '.wrap, .container, main' for its entrance scale. On this page that
+       is the ratio-locked stage: a transform there shrinks it a few px (side gap) and
+       makes it the containing block for its absolute children. The inner layer animates
+       instead - see .flower-layout below. */
+    main.concept-two.fx-enter { animation:none !important; transform:none !important; }
+
     .flower-layout {
       position:absolute; z-index:2; inset:var(--hdr-h) 0 0 0;
       visibility:hidden; opacity:0; transition:opacity .3s ease;
     }
+    /* Opacity only. A transform here would make this element the containing block for
+       its absolutely positioned children and move the wordmark (see fx.js note above). */
     body.ready .flower-layout { visibility:visible; opacity:1; }
     @media (prefers-reduced-motion: reduce){ .flower-layout{ opacity:1; } }
 
