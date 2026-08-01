@@ -189,6 +189,7 @@ function applySite() {
   if (photo) {
     photo.src = url;
     photo.style.objectPosition = pv('site-bg-pos');
+    syncCoverHeight();
   }
 
   /* ② 파비콘 (fx.js 로딩화면 이미지도 이걸 씁니다) */
@@ -252,6 +253,20 @@ async function sendAsk() {
   try { ok = await insertRow('inquiries', { message: v }); } catch (e) { ok = false; }
   alert(ok ? '쪽지를 붙여뒀어요! 고마워요 🍀' : '전송에 실패했어요. 잠시 후 다시 시도해 주세요.');
   if (ok) { t.value = ''; closeAsk(); }
+}
+
+/* The photo layer sits behind the stage and must match its height exactly. CSS alone
+   cannot express "as tall as that element", so it is mirrored into a variable. */
+function syncCoverHeight() {
+  var stage = document.querySelector('.concept-two');
+  if (!stage) return;
+  var apply = function () {
+    var h = Math.round(stage.getBoundingClientRect().height);
+    if (h > 0) document.documentElement.style.setProperty('--cover-h', h + 'px');
+  };
+  apply();
+  if (window.ResizeObserver) new ResizeObserver(apply).observe(stage);
+  else window.addEventListener('resize', apply);
 }
 
 function markReady() { document.body.classList.add('ready'); }

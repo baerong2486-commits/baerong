@@ -12,21 +12,25 @@
        The stage keeps a fixed 16:9 ratio so SOOP's fixed-pixel iframe height cannot
        stretch it; every size inside is derived from container width (cqw), never vh.
        Sizes have no px upper bound inside the ratio box - a cap would break the ratio. */
-    .concept-two {
-      position:relative;
-      width:100%;
-      aspect-ratio:16/9;
-      overflow:hidden;
-      isolation:isolate;
-      background:var(--bg);
-      container-type:inline-size;
+    /* The photo is its own layer covering the whole page, so it always reaches both
+       edges. The stage above it only carries the content and defines the 16:9 design
+       box, which is what keeps proportions identical in the SOOP embed. */
+    /* Height follows the stage, not the page. SOOP hands out a tall iframe box, and
+       inset:0 there would stretch the photo down the whole box. */
+    .cover-bg {
+      position:absolute; z-index:0; top:0; left:0; right:0;
+      overflow:hidden; background:var(--bg);
     }
+    /* Direct viewing: fill the window. Embed: match the stage exactly, because SOOP
+       hands out a tall iframe box and inset:0 there would stretch the photo. */
+    body:not(.embed) .cover-bg { height:100svh; min-height:var(--cover-h, 0px); }
+    body.embed .cover-bg { height:var(--cover-h, 56.25vw); }
     .flower-photo {
-      position:absolute; z-index:0; inset:0; width:100%; height:100%;
+      position:absolute; inset:0; width:100%; height:100%;
       object-fit:cover; object-position:center 40%;
     }
     .flower-wash {
-      position:absolute; z-index:1; inset:0;
+      position:absolute; inset:0;
       background:
         linear-gradient(90deg, rgba(244,229,235,.21), rgba(223,217,222,.04) 55%, rgba(71,62,70,.12)),
         linear-gradient(0deg, rgba(36,31,35,.17), transparent 50%);
@@ -37,8 +41,31 @@
         linear-gradient(0deg, rgba(16,12,15,.58), transparent 55%);
     }
 
-    /* Header keeps px sizing so it matches the sub pages exactly (no jump on navigation). */
-    .concept-two > .flower-header { position:absolute; z-index:10; top:0; left:0; right:0; }
+    .concept-two {
+      position:relative; z-index:1;
+      width:100%;
+      aspect-ratio:16/9;
+      background:transparent;
+      container-type:inline-size;
+      /* Left inset shared by the logo and the card so they always line up. */
+      --edge-l:3cqw;
+    }
+    /* Direct viewing: the 16:9 box is sized to fit the window, so the page never
+       scrolls and the card keeps its designed size. Leftover space is not empty -
+       the photo layer behind fills it edge to edge. */
+    body:not(.embed) .concept-two {
+      width:min(100%, calc(100svh * 16 / 9));
+      margin:0 auto;
+    }
+
+    /* Header keeps px sizing so it matches the sub pages exactly (no jump on navigation),
+       but its left/right inset follows the stage instead of the 1180px content box,
+       so the logo lines up with the paper card at any window width. */
+    .concept-two > .flower-header {
+      position:absolute; z-index:10; top:0; left:0; right:0;
+      max-width:none; margin:0;
+      padding-left:var(--edge-l); padding-right:5.4cqw;
+    }
 
     /* fx.js targets '.wrap, .container, main' for its entrance scale. On this page that
        is the ratio-locked stage: a transform there shrinks it a few px (side gap) and
@@ -57,13 +84,15 @@
 
     /* Paper note */
     .flower-paper {
-      position:absolute; left:5.4cqw; top:34%;
+      position:absolute; left:var(--edge-l); top:34%;
+      max-height:calc(68% - 20px);
       width:39cqw;
       padding:2.4cqw 3.1cqw 2cqw;
       color:var(--text); background:color-mix(in srgb, var(--card) 94%, transparent);
       box-shadow:0 1.6cqw 3.7cqw rgba(35,28,33,.21);
       transform:translateY(-50%) rotate(-.35deg);
       transform-origin:center; backdrop-filter:blur(7px);
+      overflow:auto;
     }
     .flower-paper::before {
       content:''; position:absolute; inset:0; pointer-events:none; opacity:.4;
@@ -167,14 +196,16 @@
        cqw would collapse here (390px container = 24% of design), so every visible size
        is re-declared in real px. Widths only - vh would blow up inside the SOOP app. */
     @media (max-width:959px){
+      body[data-page="home"] { --photoH:clamp(280px,86vw,480px); }
       .concept-two {
-        --photoH:clamp(280px,86vw,480px);
         width:auto; aspect-ratio:auto; height:auto; min-height:0;
         overflow:visible; container-type:normal;
       }
-      .concept-two > .flower-header { position:relative; }
-      .flower-photo { height:var(--photoH); object-position:center 20%; }
-      .flower-wash  { height:var(--photoH); }
+      body:not(.embed) .concept-two { width:auto; margin:0; }
+      /* Ratio released: cqw would collapse here, so real px. */
+      .concept-two > .flower-header { position:relative; padding-left:16px; padding-right:16px; }
+      .cover-bg { height:var(--photoH); bottom:auto; }
+      .flower-photo { object-position:center 20%; }
       .flower-layout {
         position:static; inset:auto;
         padding:calc(var(--photoH) - 142px) 0 28px;
@@ -218,7 +249,7 @@
     }
     @media (max-width:520px){
       .profile-notes { grid-template-columns:1fr 1fr; }
-      .concept-two { --photoH:clamp(240px,78vw,380px); }
+      body[data-page="home"] { --photoH:clamp(240px,78vw,380px); }
     }
     @media (max-width:380px){
       .profile-notes { grid-template-columns:1fr; }
@@ -226,11 +257,19 @@
   </style>
 </head>
 <body data-page="home" data-title="Flower Diary">
-<script>if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');</script>
+<script>
+if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
+/* Decided before first paint: embeds keep the 16:9 ratio box, direct viewing fits the window. */
+try { if (window.self !== window.top) document.body.classList.add('embed'); }
+catch (e) { document.body.classList.add('embed'); }
+</script>
+
+<div class="cover-bg" aria-hidden="true">
+  <img class="flower-photo" src="./assets/baerong-blossom.webp" alt="">
+  <div class="flower-wash"></div>
+</div>
 
 <main class="concept-two">
-  <img class="flower-photo" src="./assets/baerong-blossom.webp" alt="배롱꽃과 함께 있는 배롱">
-  <div class="flower-wash" aria-hidden="true"></div>
 
   <header class="flower-header">
     <span class="flower-logo"><span class="fl">✿</span><span class="wm" data-site="logo-text">배롱</span></span>

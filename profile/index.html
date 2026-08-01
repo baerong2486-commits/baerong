@@ -21,7 +21,9 @@
       position:absolute; top:-8px; left:50%; transform:translateX(-50%) rotate(-3deg);
       width:74px; height:20px; background:var(--tape);
     }
-    .p-eyebrow { margin:0 0 9px; color:var(--main-dark); font:800 9px/1 var(--f-micro); letter-spacing:.2em; }
+    /* h1 line-height is .84, so glyphs rise ~14.5% of font-size above the line box
+       (about 14px at the largest size). The label gap must clear that. */
+    .p-eyebrow { margin:0 0 18px; color:var(--main-dark); font:800 9px/1 var(--f-micro); letter-spacing:.2em; }
     .p-name { display:flex; align-items:flex-end; gap:14px; flex-wrap:wrap; }
     .p-name h1 {
       margin:0; color:var(--main-deep);
