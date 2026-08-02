@@ -185,10 +185,11 @@ function applySite() {
   root.style.setProperty('--wash-a', (Math.max(0, Math.min(100, w)) / 100).toFixed(3));
 
   /* 메인은 실제 <img> 라 따로 */
+  /* Position comes from --site-bg-pos, not an inline style: an inline style would
+     beat the mobile media query that biases the crop toward the subject. */
   var photo = document.querySelector('.flower-photo');
   if (photo) {
     photo.src = url;
-    photo.style.objectPosition = pv('site-bg-pos');
     syncCoverHeight();
   }
 

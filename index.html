@@ -27,7 +27,7 @@
     body.embed .cover-bg { height:var(--cover-h, 56.25vw); }
     .flower-photo {
       position:absolute; inset:0; width:100%; height:100%;
-      object-fit:cover; object-position:center 40%;
+      object-fit:cover; object-position:var(--site-bg-pos, center 26%);
     }
     .flower-wash {
       position:absolute; inset:0;
@@ -204,8 +204,14 @@
       body:not(.embed) .concept-two { width:auto; margin:0; }
       /* Ratio released: cqw would collapse here, so real px. */
       .concept-two > .flower-header { position:relative; padding-left:16px; padding-right:16px; }
-      .cover-bg { height:var(--photoH); bottom:auto; }
-      .flower-photo { object-position:center 20%; }
+      /* Media queries add no specificity: body.embed / body:not(.embed) above win
+         over a bare .cover-bg here, so both are restated. Without this the photo
+         layer takes the whole stacked page height and cover zooms the subject out. */
+      body.embed .cover-bg,
+      body:not(.embed) .cover-bg { height:var(--photoH); min-height:0; bottom:auto; }
+      /* Subject sits right of centre; a narrow cover crop centred on the image
+         cuts her out entirely. Horizontal bias is mobile-only. */
+      .flower-photo { object-position:var(--photo-pos-m, 80% 18%); }
       .flower-layout {
         position:static; inset:auto;
         padding:calc(var(--photoH) - 142px) 0 28px;
