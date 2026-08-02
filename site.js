@@ -43,8 +43,6 @@ var DEF = {
   'site-bg-pos': 'center 26%',
   'site-bg-wash': '80',             /* 0~100 — 클수록 사진이 연해짐 */
   'logo-text': '배롱',
-  'main-sub': "Baerong's soft diary",
-  'main-copy': 'BE SWEET|STAY A WHILE',
   'ghost-text': 'baerong ♡',
   'footer-note': 'be sweet, stay a while ♡',
   'footer-copy': 'BAERONG OFFICIAL · © 2026',
@@ -67,7 +65,6 @@ var DEF = {
   'sec-tmi': 'TMI', 'sec-goal': '목표',
   'sec-about': '참여 컨텐츠', 'sec-vod': '다시보기', 'sec-links': '관련 링크',
   'lbl-like': '🍀 좋아하는 것', 'lbl-dislike': '🥀 싫어하는 것',
-  'lbl-today': '오늘의 방송',
   'sec-thisweek': '이번 주', 'sec-upcoming': '다가오는 일정',
   'lbl-new': '✨ 새 옷', 'lbl-old': '🗂 기존 옷'
 };
@@ -184,15 +181,6 @@ function applySite() {
   if (isNaN(w)) w = 80;
   root.style.setProperty('--wash-a', (Math.max(0, Math.min(100, w)) / 100).toFixed(3));
 
-  /* 메인은 실제 <img> 라 따로 */
-  /* Position comes from --site-bg-pos, not an inline style: an inline style would
-     beat the mobile media query that biases the crop toward the subject. */
-  var photo = document.querySelector('.flower-photo');
-  if (photo) {
-    photo.src = url;
-    syncCoverHeight();
-  }
-
   /* ② 파비콘 (fx.js 로딩화면 이미지도 이걸 씁니다) */
   var fav = avatarUrl();
   if (fav) {
@@ -207,13 +195,7 @@ function applySite() {
     if (v !== '') el.textContent = v;
   });
 
-  /* ④ 하단 카피 (BE SWEET | STAY A WHILE) */
-  var copy = pv('main-copy').split('|');
-  var c1 = document.getElementById('copy1'), c2 = document.getElementById('copy2');
-  if (c1) c1.textContent = (copy[0] || '').trim();
-  if (c2) c2.textContent = (copy[1] || '').trim();
-
-  /* ⑤ 푸터 이메일 */
+  /* ④ 푸터 이메일 */
   var em = document.getElementById('footEmail');
   if (em) {
     var mail = pv('footer-email');
@@ -222,7 +204,7 @@ function applySite() {
       : '문의는 상단 ✉ 문의 버튼을 이용해 주세요';
   }
 
-  /* ⑥ 문서 제목 */
+  /* ⑤ 문서 제목 */
   var t = document.body.getAttribute('data-title');
   if (t) document.title = pv('info-name') + ' · ' + t;
 }
@@ -256,19 +238,6 @@ async function sendAsk() {
   if (ok) { t.value = ''; closeAsk(); }
 }
 
-/* The photo layer sits behind the stage and must match its height exactly. CSS alone
-   cannot express "as tall as that element", so it is mirrored into a variable. */
-function syncCoverHeight() {
-  var stage = document.querySelector('.concept-two');
-  if (!stage) return;
-  var apply = function () {
-    var h = Math.round(stage.getBoundingClientRect().height);
-    if (h > 0) document.documentElement.style.setProperty('--cover-h', h + 'px');
-  };
-  apply();
-  if (window.ResizeObserver) new ResizeObserver(apply).observe(stage);
-  else window.addEventListener('resize', apply);
-}
 
 function markReady() { document.body.classList.add('ready'); }
 

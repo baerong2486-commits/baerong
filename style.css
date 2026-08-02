@@ -1,6 +1,5 @@
 /* =============================================================
-   배롱 · FLOWER DIARY — 공통 스타일 (메인 + 전 서브페이지 공용)
-   · 메인(index.html)도 이 파일을 씁니다 → 상단바가 100% 동일
+   배롱 · FLOWER DIARY — 전 페이지 공용 스타일
    · 색을 바꾸려면 아래 :root 6줄 (admin 🎨 테마 탭에서도 변경 가능)
    ============================================================= */
 
@@ -38,7 +37,7 @@
   --shadow-hover: 0 20px 44px rgba(88,60,72,.22);
   --transition: .2s ease;
   --page-width: 1180px;
-  --hdr-h: 96px;        /* 상단바 높이 — 메인 레이아웃 계산에 사용 */
+  --hdr-h: 96px;        /* 상단바 높이 */
 
   /* 배경 사진 — admin 🌸 사이트 탭에서 교체 (site.js가 덮어씀) */
   --site-bg: url('assets/baerong-blossom.webp');
@@ -97,18 +96,7 @@ a { color: inherit; text-decoration: none; }
 img { max-width: 100%; }
 
 /* 풀블리드 고정 배경 (§0.0.6 — body 배경 레이어 + fixed) */
-/* The main cover is ratio-locked, so an iframe taller than 16:9 leaves space under it.
-   That space carries the same washed photo as every other page instead of flat colour. */
-body[data-page="home"], body[data-page="home"].dark {
-  position:relative;
-  min-height:100svh;
-  display:flex;
-  flex-direction:column;
-  align-items:stretch;
-}
-body[data-page="home"] { overflow-x:hidden; }
-
-body.sub, body[data-page="home"] {
+body.sub {
   background-image:
     linear-gradient(180deg,
       rgba(255,251,252, var(--wash-a)) 0%,
@@ -120,13 +108,13 @@ body.sub, body[data-page="home"] {
   background-size: 100% 100%, cover;
   background-attachment: fixed, fixed;
 }
-body.sub.dark, body[data-page="home"].dark {
+body.sub.dark {
   background-image:
     linear-gradient(180deg, rgba(28,23,27,.93) 0%, rgba(32,26,31,.90) 40%, rgba(24,20,23,.94) 100%),
     var(--site-bg);
 }
 
-/* 상단바 — 마스킹 테이프 (메인·서브 100% 동일 마크업/CSS) / 시트와 같은 폭·같은 좌우 여백으로 정렬됩니다. */
+/* 상단바 — 마스킹 테이프. 전 페이지 동일 마크업, 시트와 같은 폭·좌우 여백 */
 .flower-header {
   position: relative; z-index: 10;
   max-width: var(--page-width); margin: 0 auto;
@@ -136,8 +124,7 @@ body.sub.dark, body[data-page="home"].dark {
   align-items: center; gap: clamp(20px, 3vw, 56px);
 }
 
-/* 로고 = 종이 라벨에 붙인 ✿ + 손글씨 워드마크
-   (메인은 사진 위라 흰 글씨면 대비가 부족 → 메인·서브 모두 종이 라벨로 통일) */
+/* 로고 = 종이 라벨에 붙인 ✿ + 손글씨 워드마크 */
 .flower-logo {
   position: relative; flex: none;
   display: flex; align-items: baseline; gap: 11px;
@@ -197,18 +184,10 @@ body.sub.dark, body[data-page="home"].dark {
 .flower-nav a:hover::after {
   background: radial-gradient(circle at 0 50%, transparent 2.9px, var(--tape-solid) 3px) 0 0/6px 8px repeat-y;
 }
-/* 메인(사진 위)은 테이프를 조금 더 불투명하게 */
-body:not(.sub) .flower-nav a { background: var(--tape-solid); }
-body:not(.sub) .flower-nav a::before,
-body:not(.sub) .flower-nav a::after {
-  background: radial-gradient(circle at 0 50%, transparent 2.9px, var(--tape-solid) 3px) 0 0/6px 8px repeat-y;
-}
-/* ③ 메인에서는 "메인" 버튼 숨김 (자기 페이지로 가는 버튼) */
-body[data-page="home"] .flower-nav a[data-nav="home"] { display: none; }
-body[data-page="home"] .flower-logo { pointer-events: none; cursor: default; }
+/* 로고는 프로필로 가므로 프로필에서는 눌리지 않게 */
+body[data-page="profile"] .flower-logo { pointer-events: none; cursor: default; }
 
 /* 현재 페이지 = 진한 테이프 (마크업은 전 페이지 동일, body[data-page]로만 구분) */
-body[data-page="home"]     .flower-nav a[data-nav="home"],
 body[data-page="profile"]  .flower-nav a[data-nav="profile"],
 body[data-page="schedule"] .flower-nav a[data-nav="schedule"],
 body[data-page="notice"]   .flower-nav a[data-nav="notice"],
@@ -217,8 +196,6 @@ body[data-page="dress"]    .flower-nav a[data-nav="dress"] {
   background: var(--tape); color: var(--tape-ink-on); font-weight: 900;
   transform: rotate(.6deg) scale(1.05);
 }
-body[data-page="home"]     .flower-nav a[data-nav="home"]::before,
-body[data-page="home"]     .flower-nav a[data-nav="home"]::after,
 body[data-page="profile"]  .flower-nav a[data-nav="profile"]::before,
 body[data-page="profile"]  .flower-nav a[data-nav="profile"]::after,
 body[data-page="schedule"] .flower-nav a[data-nav="schedule"]::before,
