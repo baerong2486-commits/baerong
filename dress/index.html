@@ -166,10 +166,15 @@ function fmt(s){
   if (isNaN(d)) return '';
   return String(d.getFullYear()).slice(2) + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + String(d.getDate()).padStart(2,'0');
 }
+/* 정렬 기준은 관리자 목록과 같아야 함: sort_order 오름차순, 같으면 최신순 */
 function view(){
   return items.filter(function(i){
     return asText(i.category) === curCat && (curMode === 'new' ? isNew(i) : !isNew(i));
-  }).sort(function(a,b){ return new Date(b.created_at||0) - new Date(a.created_at||0); });
+  }).sort(function(a,b){
+    var d = (a.sort_order || 0) - (b.sort_order || 0);
+    if (d) return d;
+    return new Date(b.created_at||0) - new Date(a.created_at||0);
+  });
 }
 
 function buildCats(){

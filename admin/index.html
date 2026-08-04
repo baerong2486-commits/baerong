@@ -127,7 +127,7 @@
 
   <div class="card" style="padding:6px">
     <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('main',this)">🏠 메인</button>
+      <button class="tab-btn active" onclick="switchTab('main',this)">🏠 기본</button>
       <button class="tab-btn" onclick="switchTab('profile',this)">🎀 프로필</button>
       <button class="tab-btn" onclick="switchTab('notice',this)">📢 공지</button>
       <button class="tab-btn" onclick="switchTab('schedule',this)">📅 일정</button>
@@ -140,7 +140,7 @@
     </div>
   </div>
 
-  <!-- 메인 탭 -->
+  <!-- 기본 탭 -->
   <div class="tab-panel active" id="tab-main">
 
     <div class="card">
@@ -169,11 +169,11 @@
       <div class="card-title">📋 프로필 정보</div>
       <div class="form-grid">
         <div class="form-field"><label class="input-label">이름</label><input class="input" id="f-info-name" type="text" placeholder="배롱"></div>
-        <div class="form-field"><label class="input-label">영문 이름 (메인 워드마크)</label><input class="input" id="f-info-en" type="text" placeholder="BAERONG"></div>
+        <div class="form-field"><label class="input-label">영문 이름</label><input class="input" id="f-info-en" type="text" placeholder="BAERONG"></div>
         <div class="form-field full">
           <label class="input-label">한 줄 자기소개</label>
           <input class="input" id="f-bio" type="text" placeholder="당신과 행복한 하루를 만들고 싶은 배롱입니다 🍀">
-          <div class="hint">메인 종이 · 프로필 상단에 표시</div>
+          <div class="hint">프로필 상단에 표시</div>
         </div>
         <div class="form-field">
           <label class="input-label">생일 (D-Day 자동)</label>
@@ -221,7 +221,7 @@
 
     <div class="card">
       <div class="card-title">📅 방송 요일 · 시간</div>
-      <div class="hint" style="margin-bottom:10px">체크 = 방송, 미체크 = 휴방. 메인 “오늘의 방송” · 일정 이번주에 반영</div>
+      <div class="hint" style="margin-bottom:10px">체크 = 방송, 미체크 = 휴방. 일정 이번주에 반영</div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px" id="day-checks">
         <label class="chk"><input type="checkbox" class="day-chk" value="0">월</label>
         <label class="chk"><input type="checkbox" class="day-chk" value="1">화</label>
@@ -235,14 +235,14 @@
       <div class="form-field">
         <label class="input-label">방송 시간 안내 문구</label>
         <input class="input" id="f-sched-note" type="text" placeholder="매일 8~9시 사이 (랜덤 휴방)">
-        <div class="hint">메인 “오늘의 방송” · 일정 페이지에 표시</div>
+        <div class="hint">일정 페이지에 표시</div>
       </div>
       <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveDays()">저장</button></div>
     </div>
 
     <div class="card">
       <div class="card-title">🔗 관련 링크</div>
-      <div class="hint" style="margin-bottom:10px">비우면 해당 버튼이 숨겨짐. 메인 종이에는 위에서부터 3개까지 표시</div>
+      <div class="hint" style="margin-bottom:10px">비우면 해당 버튼이 숨겨짐</div>
       <div class="form-field"><label class="input-label">SOOP 방송국</label><input class="input" id="f-link-soop" type="url" placeholder="https://www.sooplive.com/station/baerong2"></div>
       <div class="form-field"><label class="input-label">디스코드</label><input class="input" id="f-link-discord" type="url" placeholder="https://discord.gg/..."></div>
       <div class="form-field"><label class="input-label">팬심 (FANCIM)</label><input class="input" id="f-link-fancim" type="url" placeholder="https://fancim.me/celeb/profile.aspx?url=504450"></div>
@@ -483,7 +483,7 @@
         <div class="form-field"><label class="input-label">분류</label>
           <select class="input" id="dr-cat"><option value="outfit">의상</option><option value="hair">헤어</option></select>
         </div>
-        <div class="form-field"><label class="input-label">순서 (작을수록 앞 · 비우면 맨 뒤)</label><input class="input" id="dr-order" type="number" min="0" placeholder="비워두면 맨 뒤"></div>
+        <div class="form-field"><label class="input-label">순서 (작을수록 앞 · 비우면 맨 앞)</label><input class="input" id="dr-order" type="number" placeholder="비워두면 맨 앞"></div>
         <div class="form-field full"><label class="input-label">이름 *</label><input class="input" id="dr-name" placeholder="예: 여름 원피스"></div>
         <div class="form-field full"><label class="input-label">설명 (선택)</label><input class="input" id="dr-desc" placeholder="짧은 설명"></div>
         <div class="form-field full">
@@ -515,9 +515,9 @@
   <!-- 사이트 탭 -->
   <div class="tab-panel" id="tab-site">
     <div class="card">
-      <div class="card-title">🖼 메인 배경 사진</div>
+      <div class="card-title">🖼 배경 사진</div>
       <div class="hint" style="margin-bottom:12px">
-        메인 화면과 모든 페이지 배경에 공통 적용. 비우면 기본 사진<br>
+        모든 페이지 배경에 공통 적용. 비우면 기본 사진<br>
         SOOP 비공개 게시판에 올린 뒤 우클릭 → “이미지 주소 복사”. 가로로 넓은 사진(16:9 이상) 권장
       </div>
       <div class="form-field">
@@ -552,19 +552,9 @@
     </div>
 
     <div class="card">
-      <div class="card-title">✿ 로고 · 메인 문구</div>
+      <div class="card-title">✿ 로고</div>
       <div class="form-grid">
         <div class="form-field"><label class="input-label">상단바 로고 글자</label><input class="input" id="f-logo-text" type="text" placeholder="배롱"></div>
-        <div class="form-field"><label class="input-label">메인 종이 부제</label><input class="input" id="f-main-sub" type="text" placeholder="Baerong's soft diary"></div>
-        <div class="form-field full">
-          <label class="input-label">메인 하단 카피 (2개)</label>
-          <input class="input" id="f-main-copy" type="text" placeholder="BE SWEET|STAY A WHILE">
-          <div class="hint"><code>|</code> 로 구분한 두 문구. 하트 양옆에 배치</div>
-        </div>
-        <div class="form-field full">
-          <label class="input-label">사진 위 큰 워드마크</label>
-          <div class="hint" style="margin-top:0">메인 탭의 “영문 이름” 값을 사용</div>
-        </div>
       </div>
       <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveLocalProfile()">저장</button></div>
     </div>
@@ -633,7 +623,6 @@
         <div class="form-field"><label class="input-label">관련 링크</label><input class="input" id="f-sec-links" type="text" placeholder="관련 링크"></div>
         <div class="form-field"><label class="input-label">좋아하는 것 (소제목)</label><input class="input" id="f-lbl-like" type="text" placeholder="🍀 좋아하는 것"></div>
         <div class="form-field"><label class="input-label">싫어하는 것 (소제목)</label><input class="input" id="f-lbl-dislike" type="text" placeholder="🥀 싫어하는 것"></div>
-        <div class="form-field"><label class="input-label">메인 “오늘의 방송”</label><input class="input" id="f-lbl-today" type="text" placeholder="오늘의 방송"></div>
         <div class="form-field"><label class="input-label">일정 “이번 주”</label><input class="input" id="f-sec-thisweek" type="text" placeholder="이번 주"></div>
         <div class="form-field"><label class="input-label">일정 “다가오는 일정”</label><input class="input" id="f-sec-upcoming" type="text" placeholder="다가오는 일정"></div>
         <div class="form-field"><label class="input-label">옷장 “새 옷” 버튼</label><input class="input" id="f-lbl-new" type="text" placeholder="✨ 새 옷"></div>
@@ -701,13 +690,13 @@ const profileKeys = [
   'stats', 'like-list', 'dislike-list', 'tmi', 'milestones',
   'msg', 'days', 'sched-note', 'link-soop', 'link-discord',
   'link-fancim', 'link-youtube', 'link-x', 'site-bg', 'site-bg-pos',
-  'site-bg-wash', 'logo-text', 'main-sub', 'main-copy', 'ghost-text',
+  'site-bg-wash', 'logo-text', 'ghost-text',
   'footer-note', 'footer-copy', 'footer-email', 'ask-title', 'ask-desc',
   'hd-schedule-title', 'hd-schedule-en', 'hd-schedule-desc', 'hd-notice-title', 'hd-notice-en',
   'hd-notice-desc', 'hd-work-title', 'hd-work-en', 'hd-work-desc', 'hd-dress-title',
   'hd-dress-en', 'hd-dress-desc', 'sec-profile', 'sec-stats', 'sec-likes',
   'sec-tmi', 'sec-goal', 'sec-about', 'sec-vod', 'sec-links',
-  'lbl-like', 'lbl-dislike', 'lbl-today', 'sec-thisweek', 'sec-upcoming',
+  'lbl-like', 'lbl-dislike', 'sec-thisweek', 'sec-upcoming',
   'lbl-new', 'lbl-old', 'theme-main', 'theme-main-dark', 'theme-main-deep',
   'theme-main-light', 'theme-bg', 'theme-logo'
 ];
@@ -1176,7 +1165,8 @@ async function addOriginalSong(){
 let dressCache = [], dressFilter = 'all';
 /* ️ 옷장 페이지 CATS · 위 select 옵션 과 반드시 같은 값 */
 const DRESS_CATS = [['outfit','의상'],['hair','헤어']];
-const dressByOrder = (a,b) => ((a.sort_order || 0) - (b.sort_order || 0)) || (new Date(a.created_at) - new Date(b.created_at));
+/* 옷장 페이지 view() 와 같은 기준 — 여기 바꾸면 dress/index.html 도 같이 */
+const dressByOrder = (a,b) => ((a.sort_order || 0) - (b.sort_order || 0)) || (new Date(b.created_at) - new Date(a.created_at));
 function hasNew(d){
   return (Array.isArray(d.badges) ? d.badges : []).some(b => {
     const l = (b && (b.label != null ? b.label : b)) || '';
@@ -1286,7 +1276,7 @@ async function addDressItem(){
   if (orderRaw !== '') { sort_order = parseInt(orderRaw, 10); if (isNaN(sort_order)) sort_order = 0; }
   else {
     const inCat = dressCache.filter(d => d.category === cat);
-    sort_order = inCat.length ? Math.max(...inCat.map(d => d.sort_order || 0)) + 1 : 0;
+    sort_order = inCat.length ? Math.min(...inCat.map(d => d.sort_order || 0)) - 1 : 0;
   }
   const row = {
     category: cat, name,
